@@ -19,9 +19,9 @@ public class UserService {
 
     public UserEntity signIn(String name, String email, String password) {
         // validar si existe el usuario
-        // generar UUID para validar el email
+        
         UUID emailCode = UUID.randomUUID();
-        // generar el registro
+
         UserEntity user = UserEntity.builder()
                 .firstName(name)
                 .lastName("")
@@ -31,8 +31,8 @@ public class UserService {
                 .emailVerified(false)
                 .state(true)
                 .build();
-        // envio del correo
-        mailService.sendEmail(email, "Verificar Correo", "template");
+        // TODO: Armar la url para enviar 
+        mailService.sendVerificationEmail(email, name, emailCode.toString());
         return repository.save(user);
     }
 

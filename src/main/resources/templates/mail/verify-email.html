@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verifica tu correo</title>
+</head>
+
+<body>
+    <h2>Hola <span th:text="${name}">Usuario</span> 👋</h2>
+
+    <p>Gracias por registrarte. Para verificar tu correo, haz clic en el siguiente enlace:</p>
+
+    <a th:href="${verificationUrl}" style="padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none;">
+        Verificar correo
+    </a>
+
+    <p>Si no solicitaste este registro, ignora este correo.</p>
+</body>
+
+</html>
