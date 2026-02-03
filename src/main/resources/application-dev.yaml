@@ -1,0 +1,30 @@
+application:
+  security:
+    jwt:
+      secret-key: qjY+ViKfqTFoUelwVpaOd1kdbaMOJ1q1taPmKTUg9Gk=
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000
+
+spring:
+  mail:
+    properties:
+      mail:
+        debug: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/letra_cambio_db
+    username: alejandro
+    password: Colombia1.
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: alejandro.vega.lims@gmail.com
+  password: xtbt wase lghp hzgh
