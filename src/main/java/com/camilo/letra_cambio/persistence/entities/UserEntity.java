@@ -32,7 +32,12 @@ public class UserEntity {
     @Column(nullable = false, length = 60)
     private String email;
 
-    @Column(name = "password_hash", nullable = false, length = 120)
+    @Column(nullable = false)
+    private String emailCode;
+
+    private boolean emailVerified;
+
+    @Column(nullable = false, length = 120)
     private String passwordHash;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
