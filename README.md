@@ -52,6 +52,58 @@ La firma física mantiene la validez legal del documento.
     - Confirmación mediante firma electrónica
     - Estado actualizado: PAGADA
 
+## FLUJO DE REGISTRO Y VALIDACION DE USUARIO
+
+1. USER (Cliente Web / React)
+   - El usuario llena el formulario de registro con los siguientes datos:
+     - name
+     - email
+     - password
+   - Envía la información al endpoint: POST /auth/register
+1. API
+   - Recibe name, email y password
+   - Valida si el correo ya se encuentra registrado
+     - Si existe, retorna error 400 (Bad Request)
+   - Si no existe:
+     - Genera un UUID para verificación de correo
+     - Crea el registro del usuario con:
+        name
+        email
+        password (hash)
+        verified = false
+        emailCode = UUID
+     - Envía un correo electrónico al usuario con el enlace de verificación (incluye el UUID)
+
+2. REACT
+   - Recibe la respuesta del backend
+   - Si ocurre un error:
+     - Muestra el mensaje correspondiente
+   - Si el registro es exitoso:
+      - Muestra mensaje indicando que debe validar su correo electrónico
+3. USER
+   - Abre el enlace recibido por correo
+   - Completa el formulario con los siguientes datos:
+      - tipo_identificacion
+      - identificacion
+      - apellido
+      - UUID
+   - Envía la información al endpoint: POST /auth/validate
+
+1. API
+   - Recibe los datos de validación
+   - Valida el UUID y busca el registro asociado
+- Si el UUID es válido:
+    - Actualiza los datos adicionales del usuario
+    - Elimina el UUID de verificación del registro
+    - Actualiza el estado del usuario a:
+      - verified = true
+    - Envía un correo de confirmación de cuenta activada
+  - Si el UUID no es válido:
+    - Retorna el error correspondiente
+1. REACT
+   - Recibe la respuesta del backend
+   - Muestra el mensaje final al usuario (éxito o error)
+
 ## ESTADOS DE LA LETRA
 
 BORRADOR: Creada, pendiente de aceptación
@@ -124,5 +176,7 @@ Confirmar pago             Registrar FirmaElectronica + actualizar estado
 ## CONTACTO
 
 Autor: Camilo Alejandro Soto Vega
+
 Email: alejandro.vega.lims@gmail.com
+
 Repositorio: https://github.com/CamiloSoto/letra-de-cambio.git

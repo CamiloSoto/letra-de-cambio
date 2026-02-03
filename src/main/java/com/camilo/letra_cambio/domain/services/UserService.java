@@ -13,13 +13,14 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class UserService {
-    private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
     private final UserJpaRepository repository;
 
     public UserEntity signIn(String name, String email, String password) {
-        // validar si existe el usuario
-        
+        if (repository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("Usuario registrado");
+        }
+
         UUID emailCode = UUID.randomUUID();
 
         UserEntity user = UserEntity.builder()
@@ -31,8 +32,7 @@ public class UserService {
                 .emailVerified(false)
                 .state(true)
                 .build();
-        // TODO: Armar la url para enviar 
-        mailService.sendVerificationEmail(email, name, emailCode.toString());
+
         return repository.save(user);
     }
 

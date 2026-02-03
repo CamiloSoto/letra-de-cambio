@@ -28,3 +28,6 @@ mail:
   port: 587
   username: alejandro.vega.lims@gmail.com
   password: xtbt wase lghp hzgh
+
+client:
+  url: http://localhost:3000
