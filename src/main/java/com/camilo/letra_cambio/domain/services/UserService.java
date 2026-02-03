@@ -1,5 +1,6 @@
 package com.camilo.letra_cambio.domain.services;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +34,14 @@ public class UserService {
                 .state(true)
                 .build();
 
+        return repository.save(user);
+    }
+
+    public Optional<UserEntity> findByEmailAndEmailCode(String email, String emailCode) {
+        return repository.findByEmailAndEmailCode(email, emailCode);
+    }
+
+    public UserEntity update(UserEntity user) {
         return repository.save(user);
     }
 

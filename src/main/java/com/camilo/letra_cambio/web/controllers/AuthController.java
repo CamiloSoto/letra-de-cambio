@@ -4,9 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.camilo.letra_cambio.domain.dtos.RegisterRequest;
+import com.camilo.letra_cambio.domain.dtos.ValidateUserRequest;
 import com.camilo.letra_cambio.domain.services.AuthService;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +22,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         service.register(request);
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateAccount(
+            @RequestBody ValidateUserRequest request,
+            @RequestParam("ec") String emailCode,
+            @RequestParam String email) {
+        service.validateUser(request, emailCode, email);
         return ResponseEntity.ok(null);
     }
 

@@ -37,6 +37,10 @@ public class UserEntity {
 
     private boolean emailVerified;
 
+    private String documentType;
+
+    private String documentNumber;
+
     @Column(nullable = false, length = 120)
     private String passwordHash;
 
