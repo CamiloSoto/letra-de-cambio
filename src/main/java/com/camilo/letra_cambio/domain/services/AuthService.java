@@ -8,6 +8,7 @@ import com.camilo.letra_cambio.domain.dtos.AuthResponse;
 import com.camilo.letra_cambio.domain.dtos.LoginRequest;
 import com.camilo.letra_cambio.domain.dtos.RegisterRequest;
 import com.camilo.letra_cambio.domain.dtos.ValidateUserRequest;
+import com.camilo.letra_cambio.persistence.entities.RefreshTokenEntity;
 import com.camilo.letra_cambio.persistence.entities.UserEntity;
 import com.camilo.letra_cambio.web.config.ClientProperties;
 import com.camilo.letra_cambio.web.config.JwtUtil;
@@ -22,6 +23,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final MailService mailService;
+    private final RefreshTokenService refreshTokenService;
 
     public void register(RegisterRequest request) {
 
@@ -42,9 +44,14 @@ public class AuthService {
             throw new IllegalStateException("Cuenta no verificada");
         }
 
+        String accessToken = jwtUtil.createAccessToken(user);
+        String refreshToken = jwtUtil.createRefreshToken(user);
+
+        refreshTokenService.create(user, refreshToken);
+
         return AuthResponse.builder()
-                .token(this.jwtUtil.createAccessToken(user))
-                .refreshToken(this.jwtUtil.createRefreshToken(user))
+                .token(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -61,6 +68,23 @@ public class AuthService {
 
         userService.update(user);
 
+    }
+
+    public AuthResponse refresh(String refreshToken) {
+
+        if (!jwtUtil.isValid(refreshToken)) {
+            throw new IllegalArgumentException("Token inválido");
+        }
+
+        RefreshTokenEntity stored = refreshTokenService.validate(refreshToken);
+        UserEntity user = stored.getUser();
+
+        String newAccessToken = jwtUtil.createAccessToken(user);
+
+        return AuthResponse.builder()
+                .token(newAccessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
 }
