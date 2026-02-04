@@ -41,6 +41,11 @@ public class UserService {
         return repository.findByEmailAndEmailCode(email, emailCode);
     }
 
+      public Optional<UserEntity> findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+
     public UserEntity update(UserEntity user) {
         return repository.save(user);
     }

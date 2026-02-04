@@ -11,7 +11,6 @@ import com.camilo.letra_cambio.domain.dtos.ValidateUserRequest;
 import com.camilo.letra_cambio.persistence.entities.UserEntity;
 import com.camilo.letra_cambio.web.config.ClientProperties;
 import com.camilo.letra_cambio.web.config.JwtUtil;
-import org.springframework.security.core.Authentication;
 
 import lombok.AllArgsConstructor;
 
@@ -33,17 +32,19 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(),
+                        request.getPassword()));
 
-        UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(request.getEmail(),
-                request.getPassword());
-        Authentication authentication = this.authenticationManager.authenticate(login);
+        UserEntity user = userService.findByEmail(request.getEmail()).orElseThrow();
 
-        System.out.println(authentication.isAuthenticated());
-        System.out.println(authentication.getPrincipal());
+        if (!user.isEmailVerified()) {
+            throw new IllegalStateException("Cuenta no verificada");
+        }
 
         return AuthResponse.builder()
-                .token(this.jwtUtil.create(request.getEmail()))
-                .refreshToken(this.jwtUtil.refreshToken(request.getEmail()))
+                .token(this.jwtUtil.createAccessToken(user))
+                .refreshToken(this.jwtUtil.createRefreshToken(user))
                 .build();
     }
 
@@ -54,7 +55,7 @@ public class AuthService {
 
         user.setDocumentNumber(request.getDocumentNumber());
         user.setDocumentType(request.getDocumentType());
-        user.setEmailCode("");
+        user.setEmailCode(null);
         user.setEmailVerified(true);
         user.setLastName(request.getLastName());
 

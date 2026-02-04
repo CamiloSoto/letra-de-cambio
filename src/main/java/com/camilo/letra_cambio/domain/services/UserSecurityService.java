@@ -21,11 +21,12 @@ public class UserSecurityService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity user = this.repository.findByEmail(username)
-                .orElseThrow(()-> new UsernameNotFoundException("user not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
         return User.builder()
                 .username(user.getEmail())
                 .password(user.getPasswordHash())
+                .authorities("USER")
                 .build();
     }
 }
