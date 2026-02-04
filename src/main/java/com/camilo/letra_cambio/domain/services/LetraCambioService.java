@@ -2,6 +2,8 @@ package com.camilo.letra_cambio.domain.services;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -12,11 +14,53 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.util.Matrix;
 import org.springframework.stereotype.Service;
 
+import com.camilo.letra_cambio.domain.dtos.LetraCambioRequest;
+import com.camilo.letra_cambio.persistence.entities.EstadoLetra;
+import com.camilo.letra_cambio.persistence.entities.LetraCambioEntity;
+import com.camilo.letra_cambio.persistence.entities.UserEntity;
+import com.camilo.letra_cambio.persistence.repositories.LetraCambioJpaRepository;
+import com.camilo.letra_cambio.persistence.repositories.UserJpaRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class LetraCambioService {
+
+    private final LetraCambioJpaRepository letraCambioRepository;
+    private final UserJpaRepository userRepository;
+
+    public LetraCambioEntity crearLetraCambio(LetraCambioRequest request) {
+
+        UserEntity girador = userRepository.findById(request.getGiradorId())
+                .orElseThrow(() -> new IllegalArgumentException("Girador no existe"));
+
+        UserEntity girado = userRepository.findById(request.getGiradoId())
+                .orElseThrow(() -> new IllegalArgumentException("Girado no existe"));
+
+        UserEntity beneficiario = userRepository.findById(request.getBeneficiarioId())
+                .orElseThrow(() -> new IllegalArgumentException("Beneficiario no existe"));
+
+        if (request.getFechaVencimiento().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("La fecha de vencimiento debe ser futura");
+        }
+
+        LetraCambioEntity letra = LetraCambioEntity.builder()
+                .monto(request.getMonto())
+                .fechaEmision(LocalDate.now())
+                .fechaVencimiento(request.getFechaVencimiento())
+                .estado(EstadoLetra.BORRADOR)
+                .girador(girador)
+                .girado(girado)
+                .beneficiario(beneficiario)
+                .lugarPago(request.getLugarPago())
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        return letraCambioRepository.save(letra);
+    }
 
     public byte[] generarLetraCambio() throws IOException {
 
