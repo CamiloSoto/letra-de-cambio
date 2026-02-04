@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.camilo.letra_cambio.domain.dtos.AuthResponse;
+import com.camilo.letra_cambio.domain.dtos.LoginRequest;
 import com.camilo.letra_cambio.domain.dtos.RegisterRequest;
 import com.camilo.letra_cambio.domain.dtos.ValidateUserRequest;
 import com.camilo.letra_cambio.domain.services.AuthService;
@@ -18,6 +20,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AuthController {
     private final AuthService service;
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(service.login(request));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {

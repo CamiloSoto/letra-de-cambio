@@ -13,13 +13,21 @@ public class JwtUtil {
     private static final String SEED = "Colombia1.";
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SEED);
 
-    public String create(String username, String tenant) {
+    public String create(String username) {
         return JWT.create()
                 .withSubject(username)
-                .withClaim("tenant", tenant)
                 .withIssuer("olimac")
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)))
+                .sign(ALGORITHM);
+    }
+
+    public String refreshToken(String username) {
+        return JWT.create()
+                .withSubject(username)
+                .withIssuer("olimac")
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(2)))
                 .sign(ALGORITHM);
     }
 
