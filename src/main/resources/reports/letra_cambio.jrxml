@@ -30,28 +30,113 @@
 
             <!-- COLUMNA IZQUIERDA -->
             <line>
-                <reportElement x="70" y="5" width="1" height="386" />
+                <reportElement x="30" y="5" width="1" height="386" />
+            </line>
+
+            <line>
+                <reportElement x="60" y="5" width="1" height="386" />
+            </line>
+
+            <line>
+                <reportElement x="90" y="5" width="1" height="386" />
+            </line>
+
+            <line>
+                <reportElement x="120" y="5" width="1" height="386" />
             </line>
 
             <!-- ACEPTADA ROTADO -->
             <staticText>
-                <reportElement x="20" y="120" width="30" height="160" />
+                <reportElement x="15" y="120" width="30" height="160" />
                 <textElement rotation="Left" textAlignment="Center">
-                    <font size="10" isBold="true" />
+                    <font size="12" isBold="true" />
                 </textElement>
                 <text><![CDATA[ACEPTADA]]></text>
             </staticText>
 
             <!-- FIRMA GIRADOR ROTADO -->
             <staticText>
-                <reportElement x="45" y="120" width="30" height="200" />
-                <textElement rotation="Left" textAlignment="Center">
-                    <font size="8" />
+                <reportElement x="30" y="180" width="30" height="200" />
+                <textElement rotation="Left" textAlignment="Left">
+                    <font size="12" />
                 </textElement>
-                <text><![CDATA[Firma y C.C. del Girador]]></text>
+                <text><![CDATA[1]]></text>
             </staticText>
 
-            <!-- TITULO -->
+            <staticText>
+                <reportElement x="45" y="180" width="20" height="200" />
+                <textElement rotation="Left" textAlignment="Left">
+                    <font size="8" />
+                </textElement>
+                <text><![CDATA[CC o NIT]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="60" y="180" width="30" height="200" />
+                <textElement rotation="Left" textAlignment="Left">
+                    <font size="12" />
+                </textElement>
+                <text><![CDATA[2]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="75" y="180" width="20" height="200" />
+                <textElement rotation="Left" textAlignment="Left">
+                    <font size="8" />
+                </textElement>
+                <text><![CDATA[CC o NIT]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="90" y="180" width="30" height="200" />
+                <textElement rotation="Left" textAlignment="Left">
+                    <font size="12" />
+                </textElement>
+                <text><![CDATA[3]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="105" y="180" width="20" height="200" />
+                <textElement rotation="Left" textAlignment="Left">
+                    <font size="8" />
+                </textElement>
+                <text><![CDATA[CC o NIT]]></text>
+            </staticText>
+
+
+            <line>
+                <reportElement x="120" y="40" width="486" height="1" />
+            </line>
+
+            <line>
+                <reportElement x="120" y="105" width="486" height="1" />
+            </line>
+
+            <line>
+                <reportElement x="120" y="170" width="486" height="1" />
+            </line>
+
+            <line>
+                <reportElement x="120" y="240" width="486" height="1" />
+            </line>
+
+            <line>
+                <reportElement x="120" y="260" width="300" height="1" />
+            </line>
+
+            <line>
+                <reportElement x="140" y="280" width="280" height="1" />
+            </line>
+
+            <line>
+                <reportElement x="140" y="300" width="280" height="1" />
+            </line>
+
+            <line>
+                <reportElement x="140" y="320" width="280" height="1" />
+            </line>
+
+
             <staticText>
                 <reportElement x="250" y="15" width="200" height="25" />
                 <textElement textAlignment="Center">
@@ -60,94 +145,146 @@
                 <text><![CDATA[Letra de Cambio]]></text>
             </staticText>
 
-            <!-- NO / FECHA -->
+            <!-- SECCION 2 -->
+
             <staticText>
-                <reportElement x="90" y="50" width="40" height="15" />
-                <text><![CDATA[No.]]></text>
+                <reportElement x="130" y="50" width="40" height="15" />
+                <text><![CDATA[Fecha:]]></text>
             </staticText>
 
             <textField>
-                <reportElement x="120" y="50" width="140" height="15" />
-                <textFieldExpression><![CDATA[$P{numero}]]></textFieldExpression>
-            </textField>
-
-            <staticText>
-                <reportElement x="360" y="50" width="50" height="15" />
-                <text><![CDATA[Fecha]]></text>
-            </staticText>
-
-            <textField>
-                <reportElement x="410" y="50" width="140" height="15" />
+                <reportElement x="165" y="50" width="200" height="15" />
                 <textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
             </textField>
 
-            <!-- TEXTO LEGAL COMPLETO -->
             <staticText>
-                <reportElement x="90" y="80" width="500" height="55" />
-                <textElement textAlignment="Justified">
-                    <font size="9" />
-                </textElement>
-                <text><![CDATA[
-Por esta letra de cambio, excuso el protesto, aviso de rechazo y la presentación para el pago, a la orden de:
-]]></text>
+                <reportElement x="300" y="50" width="90" height="15" />
+                <text><![CDATA[No.__________]]></text>
             </staticText>
 
-            <!-- SEÑORES -->
-            <textField>
-                <reportElement x="90" y="135" width="500" height="15" />
-                <textFieldExpression><![CDATA[$P{senores}]]></textFieldExpression>
-            </textField>
 
-            <line>
-                <reportElement x="90" y="150" width="500" height="1" />
-            </line>
-
-            <!-- VALOR -->
             <staticText>
-                <reportElement x="90" y="165" width="80" height="15" />
-                <text><![CDATA[La suma de]]></text>
+                <reportElement x="500" y="50" width="40" height="15" />
+                <text><![CDATA[Por$]]></text>
             </staticText>
 
             <textField>
-                <reportElement x="170" y="165" width="200" height="15" />
+                <reportElement x="530" y="50" width="200" height="15" />
                 <textFieldExpression><![CDATA[$P{valor}]]></textFieldExpression>
             </textField>
 
-            <line>
-                <reportElement x="90" y="180" width="500" height="1" />
-            </line>
-
-            <!-- DIRECCION -->
-            <staticText>
-                <reportElement x="90" y="205" width="70" height="15" />
-                <text><![CDATA[Dirección]]></text>
-            </staticText>
-
-            <textField>
-                <reportElement x="160" y="205" width="250" height="15" />
-                <textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
-            </textField>
-
-            <!-- CIUDAD TEL -->
-            <staticText>
-                <reportElement x="90" y="230" width="50" height="15" />
-                <text><![CDATA[Ciudad]]></text>
-            </staticText>
-
-            <textField>
-                <reportElement x="140" y="230" width="140" height="15" />
-                <textFieldExpression><![CDATA[$P{ciudad}]]></textFieldExpression>
-            </textField>
 
             <staticText>
-                <reportElement x="300" y="230" width="30" height="15" />
-                <text><![CDATA[Tel]]></text>
+                <reportElement x="130" y="70" width="80" height="15" />
+                <text><![CDATA[Señor(es) :]]></text>
             </staticText>
 
-            <textField>
-                <reportElement x="330" y="230" width="140" height="15" />
-                <textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
-            </textField>
+
+            <staticText>
+                <reportElement x="280" y="90" width="40" height="15" />
+                <text><![CDATA[El]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="330" y="90" width="40" height="15" />
+                <text><![CDATA[de]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="430" y="90" width="40" height="15" />
+                <text><![CDATA[del año]]></text>
+            </staticText>
+
+            <!-- SECCION 3 -->
+
+            <staticText>
+                <reportElement x="130" y="110" width="180" height="15" />
+                <text><![CDATA[Se servira ud. pagar solidariamente en]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="280" y="130" width="360" height="15" />
+                <text><![CDATA[por esta unica de cambio sin protesto, excusado el aviso de rechazo a]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="130" y="150" width="180" height="15" />
+                <text><![CDATA[la orden de: ________________]]></text>
+            </staticText>
+
+            <!-- SECCION 4 -->
+
+            <staticText>
+                <reportElement x="130" y="180" width="300" height="15" />
+                <text><![CDATA[La cantidad de:_____________________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="130" y="200" width="300" height="15" />
+                <text><![CDATA[Pesos m/l en __________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="260" y="200" width="300" height="15" />
+                <text><![CDATA[cuota(s) $ __________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="370" y="200" width="300" height="15" />
+                <text><![CDATA[, más intereses durante el plazo del __________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="300" y="220" width="400" height="15" />
+                <text><![CDATA[(          $) mensual  y de mora a la tasa máxima legal autorizada.]]></text>
+            </staticText>
+
+            <!-- SECCION 5 -->
+
+            <staticText>
+                <reportElement x="150" y="245" width="400" height="15" />
+                <text><![CDATA[DIRECCION ACEPTANTES]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="350" y="245" width="400" height="15" />
+                <text><![CDATA[TELEFONO]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="430" y="245" width="400" height="15" />
+                <text><![CDATA[Atentamente,]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="125" y="155" width="30" height="160" />
+                <textElement rotation="Left" textAlignment="Left">
+                    <font size="10" isBold="true" />
+                </textElement>
+                <text><![CDATA[GIRADOS]]></text>
+            </staticText>
+
+
+            <staticText>
+                <reportElement x="140" y="265" width="400" height="15" />
+                <text><![CDATA[1]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="140" y="285" width="400" height="15" />
+                <text><![CDATA[2]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="140" y="305" width="400" height="15" />
+                <text><![CDATA[3]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="480" y="305" width="80" height="15" />
+                <text><![CDATA[(GIRADOR)]]></text>
+            </staticText>
+
 
         </band>
     </title>
