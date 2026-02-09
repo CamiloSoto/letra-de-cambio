@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperReport PUBLIC
+    "-//JasperReports//DTD Report Design//EN"
+    "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport
+    name="letra_cambio"
+    pageWidth="612"
+    pageHeight="396"
+    columnWidth="612"
+    leftMargin="0"
+    rightMargin="0"
+    topMargin="0"
+    bottomMargin="0">
+
+    <!-- ================= PARAMETERS ================= -->
+    <parameter name="numero" class="java.lang.String"/>
+    <parameter name="fecha" class="java.lang.String"/>
+    <parameter name="valor" class="java.lang.String"/>
+    <parameter name="senores" class="java.lang.String"/>
+    <parameter name="ciudad" class="java.lang.String"/>
+    <parameter name="direccion" class="java.lang.String"/>
+    <parameter name="telefono" class="java.lang.String"/>
+
+    <!-- ================= TITLE ================= -->
+    <title>
+        <band height="396">
+
+            <!-- BORDE -->
+            <rectangle>
+                <reportElement x="5" y="5" width="602" height="386"/>
+            </rectangle>
+
+            <!-- TÍTULO -->
+            <staticText>
+                <reportElement x="220" y="15" width="200" height="25"/>
+                <textElement textAlignment="Center">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[LETRA DE CAMBIO]]></text>
+            </staticText>
+
+            <!-- NÚMERO -->
+            <staticText>
+                <reportElement x="20" y="55" width="60" height="15"/>
+                <text><![CDATA[No.]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="60" y="55" width="100" height="15"/>
+                <textFieldExpression><![CDATA[$P{numero}]]></textFieldExpression>
+            </textField>
+
+            <!-- FECHA -->
+            <staticText>
+                <reportElement x="420" y="55" width="50" height="15"/>
+                <text><![CDATA[Fecha]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="470" y="55" width="120" height="15"/>
+                <textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+            </textField>
+
+            <!-- TEXTO LEGAL -->
+            <staticText>
+                <reportElement x="20" y="90" width="570" height="40"/>
+                <textElement>
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[Por esta letra de cambio, el día __________ se servirán pagar solidariamente a la orden de:]]></text>
+            </staticText>
+
+            <!-- SEÑORES -->
+            <textField>
+                <reportElement x="20" y="135" width="570" height="20"/>
+                <textElement>
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{senores}]]></textFieldExpression>
+            </textField>
+
+            <!-- VALOR -->
+            <staticText>
+                <reportElement x="20" y="165" width="120" height="15"/>
+                <text><![CDATA[La suma de:]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="140" y="165" width="200" height="15"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{valor}]]></textFieldExpression>
+            </textField>
+
+            <!-- DIRECCIÓN -->
+            <staticText>
+                <reportElement x="20" y="205" width="70" height="15"/>
+                <text><![CDATA[Dirección]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="90" y="205" width="300" height="15"/>
+                <textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
+            </textField>
+
+            <!-- CIUDAD -->
+            <staticText>
+                <reportElement x="20" y="230" width="60" height="15"/>
+                <text><![CDATA[Ciudad]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="80" y="230" width="150" height="15"/>
+                <textFieldExpression><![CDATA[$P{ciudad}]]></textFieldExpression>
+            </textField>
+
+            <!-- TEL -->
+            <staticText>
+                <reportElement x="260" y="230" width="40" height="15"/>
+                <text><![CDATA[Tel]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="300" y="230" width="150" height="15"/>
+                <textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
+            </textField>
+
+            <!-- FIRMAS -->
+            <staticText>
+                <reportElement x="80" y="300" width="180" height="15"/>
+                <text><![CDATA[Firma Girador]]></text>
+            </staticText>
+
+            <line>
+                <reportElement x="80" y="295" width="180" height="1"/>
+            </line>
+
+            <staticText>
+                <reportElement x="350" y="300" width="180" height="15"/>
+                <text><![CDATA[Aceptada]]></text>
+            </staticText>
+
+            <line>
+                <reportElement x="350" y="295" width="180" height="1"/>
+            </line>
+
+        </band>
+    </title>
+
+</jasperReport>
