@@ -14,10 +14,14 @@
     <!-- PARAMS -->
     <parameter name="numero" class="java.lang.String" />
     <parameter name="fecha" class="java.lang.String" />
+    <parameter name="fechaPago" class="java.lang.String" />
     <parameter name="valor" class="java.lang.String" />
+    <parameter name="valorLetras" class="java.lang.String" />
     <parameter name="senores" class="java.lang.String" />
     <parameter name="direccion" class="java.lang.String" />
     <parameter name="ciudad" class="java.lang.String" />
+
+    <parameter name="nombreGirador" class="java.lang.String" />
     <parameter name="telefono" class="java.lang.String" />
 
     <title>
@@ -158,10 +162,14 @@
             </textField>
 
             <staticText>
-                <reportElement x="300" y="50" width="90" height="15" />
-                <text><![CDATA[No.__________]]></text>
+                <reportElement x="320" y="50" width="90" height="15" />
+                <text><![CDATA[No.]]></text>
             </staticText>
 
+            <textField>
+                <reportElement x="340" y="50" width="200" height="15" />
+                <textFieldExpression><![CDATA[$P{numero}]]></textFieldExpression>
+            </textField>
 
             <staticText>
                 <reportElement x="500" y="50" width="40" height="15" />
@@ -179,45 +187,59 @@
                 <text><![CDATA[Señor(es) :]]></text>
             </staticText>
 
+            <textField>
+                <reportElement x="180" y="70" width="300" height="15" />
+                <textFieldExpression><![CDATA[$P{senores}]]></textFieldExpression>
+            </textField>
 
             <staticText>
-                <reportElement x="280" y="90" width="40" height="15" />
-                <text><![CDATA[El]]></text>
+                <reportElement x="130" y="90" width="80" height="15" />
+                <text><![CDATA[El:]]></text>
             </staticText>
 
-            <staticText>
-                <reportElement x="330" y="90" width="40" height="15" />
-                <text><![CDATA[de]]></text>
-            </staticText>
-
-            <staticText>
-                <reportElement x="430" y="90" width="40" height="15" />
-                <text><![CDATA[del año]]></text>
-            </staticText>
+            <textField>
+                <reportElement x="150" y="90" width="200" height="15" />
+                <textFieldExpression><![CDATA[$P{fechaPago}]]></textFieldExpression>
+            </textField>
 
             <!-- SECCION 3 -->
 
             <staticText>
-                <reportElement x="130" y="110" width="180" height="15" />
-                <text><![CDATA[Se servira ud. pagar solidariamente en]]></text>
+                <reportElement x="130" y="110" width="250" height="15" />
+                <text><![CDATA[Se servira (n) ud(s) pagar solidariamente en]]></text>
             </staticText>
 
+            <textField>
+                <reportElement x="330" y="110" width="200" height="15" />
+                <textFieldExpression><![CDATA[$P{ciudad}]]></textFieldExpression>
+            </textField>
+
             <staticText>
-                <reportElement x="280" y="130" width="360" height="15" />
-                <text><![CDATA[por esta unica de cambio sin protesto, excusado el aviso de rechazo a]]></text>
+                <reportElement x="130" y="130" width="360" height="15" />
+                <text><![CDATA[por esta unica de cambio sin protesto, excusado el aviso de rechazo a la orden de:]]></text>
             </staticText>
+
+            <textField>
+                <reportElement x="450" y="130" width="200" height="15" />
+                <textFieldExpression><![CDATA[$P{nombreGirador}]]></textFieldExpression>
+            </textField>
 
             <staticText>
                 <reportElement x="130" y="150" width="180" height="15" />
-                <text><![CDATA[la orden de: ________________]]></text>
+                <text><![CDATA[________________]]></text>
             </staticText>
 
             <!-- SECCION 4 -->
 
             <staticText>
                 <reportElement x="130" y="180" width="300" height="15" />
-                <text><![CDATA[La cantidad de:_____________________]]></text>
+                <text><![CDATA[La cantidad de:]]></text>
             </staticText>
+
+            <textField>
+                <reportElement x="200" y="180" width="200" height="15" />
+                <textFieldExpression><![CDATA[$P{valorLetras}]]></textFieldExpression>
+            </textField>
 
             <staticText>
                 <reportElement x="130" y="200" width="300" height="15" />

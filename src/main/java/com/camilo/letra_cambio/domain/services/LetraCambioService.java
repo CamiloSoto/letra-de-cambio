@@ -69,11 +69,14 @@ public class LetraCambioService {
                         JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
 
                         Map<String, Object> params = new HashMap<>();
-                        params.put("numero", "1014299767");
-                        params.put("fecha", "09/10/2026");
-                        params.put("valor", "500000");
-                        params.put("senores", "senoress");
+                        params.put("fecha", "28 de frebrero del 2025");
+                        params.put("fechaPago", "28 de Noviembre del 2025");
+                        params.put("numero", "1");
+                        params.put("valor", "4.000.000");
+                        params.put("valorLetras", "Cuatro millones de pesos");
+                        params.put("senores", "Maria Daniela Martinez Rodriguez");
                         params.put("ciudad", "Bogotá");
+                        params.put("nombreGirador", "Jessica Gonzales Santodomoingo");
                         params.put("direccion", "cll 70 a bis a # 117-96");
                         params.put("telefono", "3059294167");
 
