@@ -1,13 +1,18 @@
 package com.camilo.letra_cambio.domain.services;
 
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.camilo.letra_cambio.domain.dtos.LetraCambioRequest;
+import com.camilo.letra_cambio.persistence.entities.EstadoLetra;
 import com.camilo.letra_cambio.persistence.entities.LetraCambioEntity;
+import com.camilo.letra_cambio.persistence.repositories.LetraCambioJpaRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -23,37 +28,31 @@ import net.sf.jasperreports.engine.JasperReport;
 @Transactional
 public class LetraCambioService {
 
+        private final LetraCambioJpaRepository repository;
+
         public LetraCambioEntity crearLetraCambio(LetraCambioRequest request) {
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
-                // UserEntity girador = userRepository.findById(request.getGiradorId())
-                // .orElseThrow(() -> new IllegalArgumentException("Girador no existe"));
+                LetraCambioEntity letra = LetraCambioEntity.builder()
+                                .ciudad(request.getCiudad())
+                                .monto(request.getMonto())
+                                .montoLetras(request.getMontoLetras())
+                                .fechaEmision(LocalDate.parse(request.getFechaEmision(), formatter))
+                                .fechaVencimiento(LocalDate.parse(request.getFechaVencimiento(), formatter))
+                                .giradorNombre(request.getGirador().getNombre())
+                                .giradorDocumento(request.getGirador().getDocumento())
+                                .giradorDocumentoCiudad(request.getGirador().getDocumentoCiudad())
+                                .giradoNombre(request.getGirado().getNombre())
+                                .giradoDocumento(request.getGirado().getDocumento())
+                                .giradoDocumentoCiudad(request.getGirado().getDocumentoCiudad())
+                                .beneficiarioNombre(request.getBeneficiario().getNombre())
+                                .beneficiarioDocumento(request.getBeneficiario().getDocumento())
+                                .beneficiarioDocumentoCiudad(request.getBeneficiario().getDocumentoCiudad())
+                                .createdAt(LocalDateTime.now())
+                                .estado(EstadoLetra.BORRADOR)
+                                .build();
 
-                // UserEntity girado = userRepository.findById(request.getGiradoId())
-                // .orElseThrow(() -> new IllegalArgumentException("Girado no existe"));
-
-                // UserEntity beneficiario =
-                // userRepository.findById(request.getBeneficiarioId())
-                // .orElseThrow(() -> new IllegalArgumentException("Beneficiario no existe"));
-
-                // if (request.getFechaVencimiento().isBefore(LocalDate.now())) {
-                // throw new IllegalArgumentException("La fecha de vencimiento debe ser
-                // futura");
-                // }
-
-                // LetraCambioEntity letra = LetraCambioEntity.builder()
-                // .monto(request.getMonto())
-                // .fechaEmision(LocalDate.now())
-                // .fechaVencimiento(request.getFechaVencimiento())
-                // .estado(EstadoLetra.BORRADOR)
-                // .girador(girador)
-                // .girado(girado)
-                // .beneficiario(beneficiario)
-                // .lugarPago(request.getLugarPago())
-                // .createdAt(LocalDateTime.now())
-                // .build();
-
-                // return letraCambioRepository.save(letra);
-                return null;
+                return repository.save(letra);
         }
 
         public byte[] generarPdf(LetraCambioRequest request) {

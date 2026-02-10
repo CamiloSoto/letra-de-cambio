@@ -33,8 +33,7 @@ public class LetraCambioController {
     }
 
     @PostMapping
-    public ResponseEntity<LetraCambioEntity> crearLetra(
-            @RequestBody LetraCambioRequest request) {
+    public ResponseEntity<LetraCambioEntity> crearLetra(@RequestBody LetraCambioRequest request) {
 
         LetraCambioEntity letra = service.crearLetraCambio(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(letra);

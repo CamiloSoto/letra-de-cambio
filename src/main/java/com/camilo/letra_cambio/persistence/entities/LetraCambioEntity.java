@@ -11,7 +11,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +28,12 @@ public class LetraCambioEntity {
     @GeneratedValue
     private UUID id;
 
+    private String ciudad;
+
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal monto;
+
+    private String montoLetras;
 
     @Column(nullable = false)
     private LocalDate fechaEmision;
@@ -38,24 +41,24 @@ public class LetraCambioEntity {
     @Column(nullable = false)
     private LocalDate fechaVencimiento;
 
+    // GIRADOR
+    private String giradorNombre;
+    private String giradorDocumento;
+    private String giradorDocumentoCiudad;
+
+    // GIRADO
+    private String giradoNombre;
+    private String giradoDocumento;
+    private String giradoDocumentoCiudad;
+
+    // BENEFICIARIO
+    private String beneficiarioNombre;
+    private String beneficiarioDocumento;
+    private String beneficiarioDocumentoCiudad;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoLetra estado;
-
-    @ManyToOne(optional = false)
-    private UserEntity girador;
-
-    @ManyToOne(optional = false)
-    private UserEntity girado;
-
-    @ManyToOne(optional = false)
-    private UserEntity beneficiario;
-
-    @Column(nullable = false)
-    private String lugarPago;
-
-    @Column(nullable = false, unique = true, updatable = false)
-    private String numeroLetra;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

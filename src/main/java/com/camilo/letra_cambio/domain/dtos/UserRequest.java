@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequest {
     private String nombre;
-    private String correo;
-    private String telefono;
-    private String direccion;
     private String documento;
+    private String documentoCiudad;
 }
