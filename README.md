@@ -11,9 +11,6 @@ y física, respetando normas legales de Colombia y prácticas comerciales.
 El sistema soporta:
 
 - Creación de letras de cambio.
-- Selección de girado y beneficiario (por email/documento)
-- Invitación de usuarios no registrados
-- Aceptación mediante firma electrónica simple
 - Generación de PDF inmutable de la letra
 - Registro de firma física (PDF escaneado)
 - Endosos con documentos anexos
@@ -22,7 +19,7 @@ El sistema soporta:
 
 El flujo del proyecto separa claramente las responsabilidades entre:
 
-1. USUARIO: realiza acciones de registro, aceptación, endoso y pago
+1. USUARIO: realiza acciones de registro, endoso y pago
 2. SISTEMA: valida, registra, genera documentos, audita y protege la inmutabilidad
 
 El sistema **no firma por los usuarios**; la firma electrónica sirve como evidencia y trazabilidad.
@@ -32,35 +29,30 @@ La firma física mantiene la validez legal del documento.
 
 1. Usuario se registra / inicia sesión
 2. Usuario crea la letra de cambio
-3. Selecciona girado y beneficiario por email/documento
-4. Si el usuario no existe:
-   - Se envía correo de invitación
-5. Estado de letra: BORRADOR
-6. Ususrios seleccionados en el registro aceptan electrónicamente (FIRMA ELECTRÓNICA)
-   - El sistema registra FirmaElectronica con IP, fecha y hash
-7. Generar PDF de la letra sin firmas (inmutable)
-8. Estado: GENERADA
-9. Usuario imprime y firma físicamente
-10. Usuario sube el PDF firmado
+3. Estado de letra: BORRADOR
+4. Generar PDF de la letra sin firmas (inmutable)
+5. Estado: GENERADA
+6. Usuario imprime y firma físicamente
+7. Usuario sube el PDF firmado
     - El sistema calcula hash y registra auditoría
-11. Estado: FIRMADA
-12. Endoso:
+8.  Estado: FIRMADA
+9.  Endoso:
     - Endosante firma electrónicamente
     - Documento anexo generado
-    - Estado actualizado
-13. Pago:
+    - Estado ENDOSADA
+10. Pago:
     - Confirmación mediante firma electrónica
     - Estado actualizado: PAGADA
 
 ## FLUJO DE REGISTRO Y VALIDACION DE USUARIO
 
-1. USER (Cliente Web / React)
+1. CLIENTE
    - El usuario llena el formulario de registro con los siguientes datos:
      - name
      - email
      - password
    - Envía la información al endpoint: POST /auth/register
-1. API
+2. API
    - Recibe name, email y password
    - Valida si el correo ya se encuentra registrado
      - Si existe, retorna error 400 (Bad Request)
@@ -74,13 +66,13 @@ La firma física mantiene la validez legal del documento.
         emailCode = UUID
      - Envía un correo electrónico al usuario con el enlace de verificación (incluye el UUID)
 
-2. REACT
+3. CLIENTE
    - Recibe la respuesta del backend
    - Si ocurre un error:
      - Muestra el mensaje correspondiente
    - Si el registro es exitoso:
       - Muestra mensaje indicando que debe validar su correo electrónico
-3. USER
+4. USER
    - Abre el enlace recibido por correo
    - Completa el formulario con los siguientes datos:
       - tipo_identificacion
@@ -89,7 +81,7 @@ La firma física mantiene la validez legal del documento.
       - UUID
    - Envía la información al endpoint: POST /auth/validate
 
-1. API
+5. API
    - Recibe los datos de validación
    - Valida el UUID y busca el registro asociado
 - Si el UUID es válido:
@@ -100,7 +92,7 @@ La firma física mantiene la validez legal del documento.
     - Envía un correo de confirmación de cuenta activada
   - Si el UUID no es válido:
     - Retorna el error correspondiente
-1. REACT
+1. CLIENTE
    - Recibe la respuesta del backend
    - Muestra el mensaje final al usuario (éxito o error)
 
@@ -165,8 +157,6 @@ USUARIO:                  SISTEMA:
 ---------------------------------------------
 Registrarse / Login        Validar usuarios
 Crear letra de cambio      Guardar BORRADOR
-Seleccionar partes         Crear usuario PENDIENTE (si aplica)
-Aceptar electrónicamente   Registrar FirmaElectronica
 Generar PDF                Generar PDF inmutable
 Firmar físicamente         Calcular hash + auditoría
 Subir PDF firmado          Actualizar estado

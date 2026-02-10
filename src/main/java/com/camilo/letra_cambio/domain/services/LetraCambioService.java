@@ -1,19 +1,13 @@
 package com.camilo.letra_cambio.domain.services;
 
 import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.camilo.letra_cambio.domain.dtos.LetraCambioRequest;
-import com.camilo.letra_cambio.persistence.entities.EstadoLetra;
 import com.camilo.letra_cambio.persistence.entities.LetraCambioEntity;
-import com.camilo.letra_cambio.persistence.entities.UserEntity;
-import com.camilo.letra_cambio.persistence.repositories.LetraCambioJpaRepository;
-import com.camilo.letra_cambio.persistence.repositories.UserJpaRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -29,56 +23,53 @@ import net.sf.jasperreports.engine.JasperReport;
 @Transactional
 public class LetraCambioService {
 
-        private final LetraCambioJpaRepository letraCambioRepository;
-        private final UserJpaRepository userRepository;
-
         public LetraCambioEntity crearLetraCambio(LetraCambioRequest request) {
 
-                UserEntity girador = userRepository.findById(request.getGiradorId())
-                                .orElseThrow(() -> new IllegalArgumentException("Girador no existe"));
+                // UserEntity girador = userRepository.findById(request.getGiradorId())
+                // .orElseThrow(() -> new IllegalArgumentException("Girador no existe"));
 
-                UserEntity girado = userRepository.findById(request.getGiradoId())
-                                .orElseThrow(() -> new IllegalArgumentException("Girado no existe"));
+                // UserEntity girado = userRepository.findById(request.getGiradoId())
+                // .orElseThrow(() -> new IllegalArgumentException("Girado no existe"));
 
-                UserEntity beneficiario = userRepository.findById(request.getBeneficiarioId())
-                                .orElseThrow(() -> new IllegalArgumentException("Beneficiario no existe"));
+                // UserEntity beneficiario =
+                // userRepository.findById(request.getBeneficiarioId())
+                // .orElseThrow(() -> new IllegalArgumentException("Beneficiario no existe"));
 
-                if (request.getFechaVencimiento().isBefore(LocalDate.now())) {
-                        throw new IllegalArgumentException("La fecha de vencimiento debe ser futura");
-                }
+                // if (request.getFechaVencimiento().isBefore(LocalDate.now())) {
+                // throw new IllegalArgumentException("La fecha de vencimiento debe ser
+                // futura");
+                // }
 
-                LetraCambioEntity letra = LetraCambioEntity.builder()
-                                .monto(request.getMonto())
-                                .fechaEmision(LocalDate.now())
-                                .fechaVencimiento(request.getFechaVencimiento())
-                                .estado(EstadoLetra.BORRADOR)
-                                .girador(girador)
-                                .girado(girado)
-                                .beneficiario(beneficiario)
-                                .lugarPago(request.getLugarPago())
-                                .createdAt(LocalDateTime.now())
-                                .build();
+                // LetraCambioEntity letra = LetraCambioEntity.builder()
+                // .monto(request.getMonto())
+                // .fechaEmision(LocalDate.now())
+                // .fechaVencimiento(request.getFechaVencimiento())
+                // .estado(EstadoLetra.BORRADOR)
+                // .girador(girador)
+                // .girado(girado)
+                // .beneficiario(beneficiario)
+                // .lugarPago(request.getLugarPago())
+                // .createdAt(LocalDateTime.now())
+                // .build();
 
-                return letraCambioRepository.save(letra);
+                // return letraCambioRepository.save(letra);
+                return null;
         }
 
-        public byte[] generarPdf() {
+        public byte[] generarPdf(LetraCambioRequest request) {
                 try {
-                        InputStream jrxml = getClass().getResourceAsStream("/reports/letra_cambio.jrxml");
+                        InputStream jrxml = getClass().getResourceAsStream("/reports/letra_cambio_simple.jrxml");
 
                         JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
 
                         Map<String, Object> params = new HashMap<>();
-                        params.put("fecha", "28 de frebrero del 2025");
-                        params.put("fechaPago", "28 de Noviembre del 2025");
-                        params.put("numero", "1");
-                        params.put("valor", "4.000.000");
-                        params.put("valorLetras", "Cuatro millones de pesos");
-                        params.put("senores", "Maria Daniela Martinez Rodriguez");
-                        params.put("ciudad", "Bogotá");
-                        params.put("nombreGirador", "Jessica Gonzales Santodomoingo");
-                        params.put("direccion", "cll 70 a bis a # 117-96");
-                        params.put("telefono", "3059294167");
+
+                        params.put("ciudad", request.getCiudad());
+                        params.put("monto", request.getMonto().toString());
+                        params.put("montoLetras", request.getMontoLetras());
+                        params.put("fechaEmision", request.getFechaEmision());
+                        params.put("fechaVencimiento", request.getFechaVencimiento());
+                        params.put("nombreGirador", request.getGirador().getNombre());
 
                         JasperPrint jasperPrint = JasperFillManager.fillReport(
                                         jasperReport,

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport
+    name="letra_cambio"
+    pageWidth="396"
+    pageHeight="612"
+    columnWidth="396"
+    leftMargin="0"
+    rightMargin="0"
+    topMargin="0"
+    bottomMargin="0">
+
+    <!-- PARAMS -->
+    <parameter name="ciudad" class="java.lang.String" />
+    <parameter name="monto" class="java.lang.String" />
+    <parameter name="montoLetras" class="java.lang.String" />
+    <parameter name="fechaEmision" class="java.lang.String" />
+    <parameter name="fechaVencimiento" class="java.lang.String" />
+    <parameter name="nombreGirador" class="java.lang.String" />
+
+    <title>
+        <band height="180">
+
+            <staticText>
+                <reportElement x="98" y="15" width="200" height="25" />
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true" />
+                </textElement>
+                <text><![CDATA[Letra de Cambio]]></text>
+            </staticText>
+
+            <textField isStretchWithOverflow="true">
+                <reportElement x="15" y="50" width="376" height="80" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+                "Por valor de: $" + $P{monto} + " (" + $P{montoLetras} + ")"
+            ]]></textFieldExpression>
+            </textField>
+
+
+            <textField isStretchWithOverflow="true">
+                <reportElement x="15" y="65" width="356" height="110" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+                "En la ciudad de " + $P{ciudad} + ", el " + $P{fechaEmision} + ", sírvase usted pagar INCONDICIONALMENTE a la orden de " + $P{nombreGirador} + " o a quien este indique, la suma de " +$P{montoLetras} + " (" + $P{monto} + ")."
+                
+            ]]></textFieldExpression>
+            </textField>
+
+
+            <textField isStretchWithOverflow="true">
+                <reportElement x="15" y="100" width="356" height="110" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+                "El pago deberá realizarse el día " + $P{fechaVencimiento} + ", en la ciudad de " + $P{ciudad}
+                
+            ]]></textFieldExpression>
+            </textField>
+
+        </band>
+    </title>
+
+
+</jasperReport>
