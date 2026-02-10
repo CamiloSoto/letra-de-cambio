@@ -11,61 +11,175 @@
     topMargin="0"
     bottomMargin="0">
 
-    <!-- PARAMS -->
+    <!-- ================== PARAMETROS ================== -->
     <parameter name="ciudad" class="java.lang.String" />
     <parameter name="monto" class="java.lang.String" />
     <parameter name="montoLetras" class="java.lang.String" />
     <parameter name="fechaEmision" class="java.lang.String" />
     <parameter name="fechaVencimiento" class="java.lang.String" />
     <parameter name="nombreGirador" class="java.lang.String" />
+    <parameter name="giradoNombre" class="java.lang.String" />
+    <parameter name="giradoDocumento" class="java.lang.String" />
 
+    <!-- ================== TITULO ================== -->
     <title>
-        <band height="180">
-
+        <band height="50">
             <staticText>
                 <reportElement x="98" y="15" width="200" height="25" />
                 <textElement textAlignment="Center">
                     <font size="14" isBold="true" />
                 </textElement>
-                <text><![CDATA[Letra de Cambio]]></text>
+                <text><![CDATA[LETRA DE CAMBIO]]></text>
             </staticText>
-
-            <textField isStretchWithOverflow="true">
-                <reportElement x="15" y="50" width="376" height="80" />
-                <textElement textAlignment="Justified">
-                    <font size="9" />
-                </textElement>
-                <textFieldExpression><![CDATA[
-                "Por valor de: $" + $P{monto} + " (" + $P{montoLetras} + ")"
-            ]]></textFieldExpression>
-            </textField>
-
-
-            <textField isStretchWithOverflow="true">
-                <reportElement x="15" y="65" width="356" height="110" />
-                <textElement textAlignment="Justified">
-                    <font size="9" />
-                </textElement>
-                <textFieldExpression><![CDATA[
-                "En la ciudad de " + $P{ciudad} + ", el " + $P{fechaEmision} + ", sírvase usted pagar INCONDICIONALMENTE a la orden de " + $P{nombreGirador} + " o a quien este indique, la suma de " +$P{montoLetras} + " (" + $P{monto} + ")."
-                
-            ]]></textFieldExpression>
-            </textField>
-
-
-            <textField isStretchWithOverflow="true">
-                <reportElement x="15" y="100" width="356" height="110" />
-                <textElement textAlignment="Justified">
-                    <font size="9" />
-                </textElement>
-                <textFieldExpression><![CDATA[
-                "El pago deberá realizarse el día " + $P{fechaVencimiento} + ", en la ciudad de " + $P{ciudad}
-                
-            ]]></textFieldExpression>
-            </textField>
-
         </band>
     </title>
 
+    <!-- ================== CUERPO ================== -->
+    <detail>
+        <band height="420">
+
+            <!-- VALOR -->
+            <textField isStretchWithOverflow="true">
+                <reportElement x="15" y="10" width="366" height="35" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+                    "Por valor de: $" + $P{monto} + " (" + $P{montoLetras} + ")"
+                ]]></textFieldExpression>
+            </textField>
+
+            <!-- TEXTO LEGAL -->
+            <textField isStretchWithOverflow="true">
+                <reportElement x="15" y="55" width="366" height="120" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+                    "En la ciudad de " + $P{ciudad} + ", el " + $P{fechaEmision} +
+                    ", sírvase usted pagar INCONDICIONALMENTE a la orden de " +
+                    $P{nombreGirador} + " o a quien este indique, la suma de " +
+                    $P{montoLetras} + " (" + $P{monto} + ")."
+                ]]></textFieldExpression>
+            </textField>
+
+            <!-- VENCIMIENTO -->
+            <textField>
+                <reportElement x="15" y="180" width="366" height="30" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+                    "El pago deberá realizarse el día " + $P{fechaVencimiento} +
+                    ", en la ciudad de " + $P{ciudad} + "."
+                ]]></textFieldExpression>
+            </textField>
+
+            <!-- ================== TABLA 2x2 ================== -->
+            <frame>
+                <reportElement x="0" y="230" width="396" height="160" />
+                <box>
+                    <pen lineWidth="0.5" />
+                </box>
+
+                <!-- Girado -->
+                <frame>
+                    <reportElement x="0" y="0" width="198" height="80" />
+                    <box>
+                        <pen lineWidth="0.5" />
+                    </box>
+
+                    <staticText>
+                        <reportElement x="5" y="5" width="188" height="15" />
+                        <textElement>
+                            <font size="9" isBold="true" />
+                        </textElement>
+                        <text><![CDATA[Girado (Deudor):]]></text>
+                    </staticText>
+
+                    <textField>
+                        <reportElement x="5" y="25" width="188" height="45" />
+                        <textElement>
+                            <font size="9" />
+                        </textElement>
+                        <textFieldExpression><![CDATA[
+                            "Nombre: " + $P{giradoNombre} + "\n" +
+                            "Cédula: " + $P{giradoDocumento} + " de Bogotá"
+                        ]]></textFieldExpression>
+                    </textField>
+                </frame>
+
+                <!-- Girador -->
+                <frame>
+                    <reportElement x="198" y="0" width="198" height="80" />
+                    <box>
+                        <pen lineWidth="0.5" />
+                    </box>
+
+                    <staticText>
+                        <reportElement x="5" y="5" width="188" height="15" />
+                        <textElement>
+                            <font size="9" isBold="true" />
+                        </textElement>
+                        <text><![CDATA[Girador (Acreedor):]]></text>
+                    </staticText>
+
+                    <staticText>
+                        <reportElement x="5" y="25" width="188" height="45" />
+                        <textElement>
+                            <font size="9" />
+                        </textElement>
+                        <text><![CDATA[
+Nombre: ALEJANDRO VEGA
+Cédula: 9.876.543.210 de Bogotá
+                        ]]></text>
+                    </staticText>
+                </frame>
+
+                <!-- Firma Girado -->
+                <frame>
+                    <reportElement x="0" y="80" width="198" height="80" />
+                    <box>
+                        <pen lineWidth="0.5" />
+                    </box>
+
+                    <staticText>
+                        <reportElement x="5" y="10" width="188" height="60" />
+                        <textElement>
+                            <font size="9" />
+                        </textElement>
+                        <text><![CDATA[
+Firma del girado (aceptación):
+______________________
+
+Huella:
+______________________
+                        ]]></text>
+                    </staticText>
+                </frame>
+
+                <!-- Firma Girador -->
+                <frame>
+                    <reportElement x="198" y="80" width="198" height="80" />
+                    <box>
+                        <pen lineWidth="0.5" />
+                    </box>
+
+                    <staticText>
+                        <reportElement x="5" y="10" width="188" height="60" />
+                        <textElement>
+                            <font size="9" />
+                        </textElement>
+                        <text><![CDATA[
+Firma del girador:
+______________________
+                        ]]></text>
+                    </staticText>
+                </frame>
+
+            </frame>
+
+        </band>
+    </detail>
 
 </jasperReport>

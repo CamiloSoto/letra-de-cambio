@@ -70,6 +70,8 @@ public class LetraCambioService {
                         params.put("fechaEmision", request.getFechaEmision());
                         params.put("fechaVencimiento", request.getFechaVencimiento());
                         params.put("nombreGirador", request.getGirador().getNombre());
+                        params.put("giradoNombre", request.getGirado().getNombre());
+                        params.put("giradoDocumento", request.getGirado().getDocumento());
 
                         JasperPrint jasperPrint = JasperFillManager.fillReport(
                                         jasperReport,

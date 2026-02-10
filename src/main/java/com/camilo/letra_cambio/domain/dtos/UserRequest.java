@@ -12,4 +12,5 @@ public class UserRequest {
     private String correo;
     private String telefono;
     private String direccion;
+    private String documento;
 }
