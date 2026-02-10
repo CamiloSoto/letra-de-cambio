@@ -69,7 +69,8 @@ public class LetraCambioService {
                         params.put("montoLetras", request.getMontoLetras());
                         params.put("fechaEmision", request.getFechaEmision());
                         params.put("fechaVencimiento", request.getFechaVencimiento());
-                        params.put("nombreGirador", request.getGirador().getNombre());
+                        params.put("giradorNombre", request.getGirador().getNombre());
+                        params.put("giradorDocumento", request.getGirador().getDocumento());
                         params.put("giradoNombre", request.getGirado().getNombre());
                         params.put("giradoDocumento", request.getGirado().getDocumento());
 
