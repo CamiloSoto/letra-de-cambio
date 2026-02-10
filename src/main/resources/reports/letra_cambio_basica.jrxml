@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport
+    name="letra_cambio"
+    pageWidth="612"
+    pageHeight="396"
+    columnWidth="612"
+    leftMargin="0"
+    rightMargin="0"
+    topMargin="0"
+    bottomMargin="0">
+
+    <!-- PARAMETROS -->
+    <parameter name="fecha" class="java.lang.String" />
+    <parameter name="valor" class="java.lang.String" />
+
+    <title>
+        <band height="396">
+
+            <!-- BORDE GENERAL -->
+            <rectangle>
+                <reportElement x="5" y="5" width="602" height="386" />
+            </rectangle>
+
+            <!-- COLUMNAS IZQUIERDA -->
+            <line>
+                <reportElement x="30" y="5" width="1" height="386" />
+            </line>
+            <line>
+                <reportElement x="60" y="5" width="1" height="386" />
+            </line>
+            <line>
+                <reportElement x="90" y="5" width="1" height="386" />
+            </line>
+            <line>
+                <reportElement x="120" y="5" width="1" height="386" />
+            </line>
+
+            <!-- ACEPTADA -->
+            <staticText>
+                <reportElement x="15" y="120" width="30" height="160" />
+                <textElement rotation="Left" textAlignment="Center">
+                    <font size="12" isBold="true" />
+                </textElement>
+                <text><![CDATA[ACEPTADA]]></text>
+            </staticText>
+
+            <!-- GIRADOS -->
+            <staticText>
+                <reportElement x="125" y="155" width="30" height="160" />
+                <textElement rotation="Left">
+                    <font size="10" isBold="true" />
+                </textElement>
+                <text><![CDATA[GIRADOS]]></text>
+            </staticText>
+
+            <!-- TITULO -->
+            <staticText>
+                <reportElement x="250" y="15" width="200" height="25" />
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true" />
+                </textElement>
+                <text><![CDATA[Letra de Cambio]]></text>
+            </staticText>
+
+            <!-- LINEAS -->
+            <line>
+                <reportElement x="120" y="40" width="486" height="1" />
+            </line>
+            <line>
+                <reportElement x="120" y="105" width="486" height="1" />
+            </line>
+            <line>
+                <reportElement x="120" y="170" width="486" height="1" />
+            </line>
+            <line>
+                <reportElement x="120" y="240" width="486" height="1" />
+            </line>
+
+            <!-- FECHA / NUMERO / VALOR -->
+            <staticText>
+                <reportElement x="130" y="50" width="40" height="15" />
+                <text><![CDATA[Fecha:]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="170" y="50" width="150" height="15" />
+                <textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="300" y="50" width="90" height="15" />
+                <text><![CDATA[No. __________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="500" y="50" width="40" height="15" />
+                <text><![CDATA[Por $]]></text>
+            </staticText>
+
+            <textField>
+                <reportElement x="530" y="50" width="70" height="15" />
+                <textFieldExpression><![CDATA[$P{valor}]]></textFieldExpression>
+            </textField>
+
+            <!-- TEXTO LEGAL CORREGIDO -->
+            <staticText>
+                <reportElement x="130" y="110" width="460" height="60" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <text><![CDATA[
+El (los) suscrito(s) se servirá(n) pagar solidariamente, por esta letra de cambio,
+sin protesto, excusado el aviso de rechazo y la presentación para el pago,
+a la orden de _________________________________.
+                ]]></text>
+            </staticText>
+
+            <!-- MONTO -->
+            <staticText>
+                <reportElement x="130" y="180" width="400" height="15" />
+                <text><![CDATA[La cantidad de: ______________________________________________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="130" y="200" width="480" height="15" />
+                <text><![CDATA[
+Pesos m/cte, pagaderos en __________ cuotas de $ __________,
+más intereses durante el plazo pactado y de mora a la tasa máxima legal autorizada.
+                ]]></text>
+            </staticText>
+
+            <!-- DIRECCION -->
+            <staticText>
+                <reportElement x="150" y="245" width="200" height="15" />
+                <text><![CDATA[DIRECCIÓN ACEPTANTES]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="350" y="245" width="120" height="15" />
+                <text><![CDATA[TELÉFONO]]></text>
+            </staticText>
+
+            <!-- FIRMAS -->
+            <staticText>
+                <reportElement x="140" y="265" width="200" height="15" />
+                <text><![CDATA[1. __________________________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="140" y="285" width="200" height="15" />
+                <text><![CDATA[2. __________________________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="140" y="305" width="200" height="15" />
+                <text><![CDATA[3. __________________________]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="480" y="305" width="100" height="15" />
+                <text><![CDATA[(GIRADOR)]]></text>
+            </staticText>
+
+        </band>
+    </title>
+
+</jasperReport>
