@@ -62,6 +62,8 @@ public class LetraCambioEntity {
     @Column(nullable = false)
     private EstadoLetra estado;
 
+    private String rutaPdf;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

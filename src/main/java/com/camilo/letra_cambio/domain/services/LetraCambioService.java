@@ -1,9 +1,6 @@
 package com.camilo.letra_cambio.domain.services;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +32,7 @@ public class LetraCambioService {
 
         private final LetraCambioJpaRepository repository;
         private final MailService mailService;
+        private final StorageService storageService;
 
         public LetraCambioEntity crearLetraCambio(LetraCambioRequest request) {
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -75,7 +73,11 @@ public class LetraCambioService {
         public LetraCambioEntity generarPdf(String id) {
                 try {
                         LetraCambioEntity letra = repository.findById(UUID.fromString(id))
-                                        .orElseThrow(() -> new RuntimeException("Letra de cambio no encontrada"));
+                                        .orElseThrow(() -> new IllegalArgumentException("Letra de cambio no encontrada"));
+
+                        if (letra.getEstado() != EstadoLetra.BORRADOR) {
+                                throw new IllegalArgumentException("El PDF ya ha sido generado para esta letra de cambio");
+                        }
 
                         InputStream jrxml = getClass()
                                         .getResourceAsStream("/reports/letra_cambio_simple.jrxml");
@@ -107,22 +109,21 @@ public class LetraCambioService {
                         byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
                         // 2️⃣ Guardar PDF en disco
-                        String rutaBase = "/tmp/letras-cambio"; // ideal: property
-                        Files.createDirectories(Paths.get(rutaBase));
+                        String key = "letras/letra_cambio_" + letra.getId() + ".pdf";
 
-                        String nombreArchivo = "letra_cambio_" + letra.getId() + ".pdf";
-                        Path rutaPdf = Paths.get(rutaBase, nombreArchivo);
-
-                        Files.write(rutaPdf, pdfBytes);
+                        storageService.save(
+                                        key,
+                                        pdfBytes,
+                                        "application/pdf");
 
                         // 3️⃣ Actualizar estado y ruta
                         letra.setEstado(EstadoLetra.GENERADA);
-                        // letra.setRutaPdf(rutaPdf.toString());
+                        letra.setRutaPdf(key);
 
                         LetraCambioEntity guardada = repository.save(letra);
 
                         // 4️⃣ Enviar email (adjunto)
-                        mailService.sendDocumentEmail("alejandro.vega.lims@gmail.com", letra.getGiradorNombre(),
+                        mailService.sendDocumentEmail("alejandro.vega.lims@gmail.com", letra.getGiradoNombre(),
                                         letra.getBeneficiarioNombre(), letra.getMonto(), letra.getFechaVencimiento(),
                                         pdfBytes);
                         // 5️⃣ Retornar el registro
