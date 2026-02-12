@@ -2,9 +2,7 @@ package com.camilo.letra_cambio.web.controllers;
 
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,15 +24,17 @@ public class LetraCambioController {
     private final LetraCambioService service;
 
     @PostMapping("/print")
-    public ResponseEntity<?> print(@RequestParam String id) {
+    public ResponseEntity<LetraCambioEntity> print(@RequestParam String id) {
 
-        byte[] pdf = service.generarPdf(id);
+        LetraCambioEntity letra = service.generarPdf(id);
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "inline; filename=letra_cambio.pdf")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdf);
+        // return ResponseEntity.ok()
+        // .header(HttpHeaders.CONTENT_DISPOSITION,
+        // "inline; filename=letra_cambio.pdf")
+        // .contentType(MediaType.APPLICATION_PDF)
+        // .body(pdf);
+
+        return ResponseEntity.ok(letra);
     }
 
     @PostMapping

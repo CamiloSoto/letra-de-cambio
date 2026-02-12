@@ -1,5 +1,6 @@
 package com.camilo.letra_cambio.domain.services;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class MailService {
     private final MailProperties mailProperties;
     private final SpringTemplateEngine templateEngine;
 
-    public boolean sendEmail(String to, String subject, String body) {
+    public boolean sendEmail(String to, String subject, String body, byte[] attachment) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -29,6 +30,12 @@ public class MailService {
             helper.setText(body, true);
             helper.setFrom(mailProperties.getUsername());
             // Enviar el correo electrónico
+
+            // Verificamos si hay un archivo adjunto
+            if (attachment != null && attachment.length > 0) {
+                ByteArrayResource byteArrayResource = new ByteArrayResource(attachment);
+                helper.addAttachment("letra_cambio.pdf", byteArrayResource);
+            }
             mailSender.send(message);
             return true;
         } catch (MessagingException e) {

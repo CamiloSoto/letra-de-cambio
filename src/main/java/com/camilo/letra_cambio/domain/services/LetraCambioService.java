@@ -1,6 +1,9 @@
 package com.camilo.letra_cambio.domain.services;
 
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +34,7 @@ import net.sf.jasperreports.engine.JasperReport;
 public class LetraCambioService {
 
         private final LetraCambioJpaRepository repository;
+        private final MailService mailService;
 
         public LetraCambioEntity crearLetraCambio(LetraCambioRequest request) {
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -68,17 +72,21 @@ public class LetraCambioService {
                 return repository.findByGiradorDocumento(documento);
         }
 
-        public byte[] generarPdf(String id) {
+        public LetraCambioEntity generarPdf(String id) {
                 try {
                         LetraCambioEntity letra = repository.findById(UUID.fromString(id))
                                         .orElseThrow(() -> new RuntimeException("Letra de cambio no encontrada"));
 
-                        InputStream jrxml = getClass().getResourceAsStream("/reports/letra_cambio_simple.jrxml");
+                        InputStream jrxml = getClass()
+                                        .getResourceAsStream("/reports/letra_cambio_simple.jrxml");
+
+                        if (jrxml == null) {
+                                throw new RuntimeException("No se encontró el archivo JRXML");
+                        }
 
                         JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
 
                         Map<String, Object> params = new HashMap<>();
-
                         params.put("ciudad", letra.getCiudad());
                         params.put("monto", letra.getMonto().toString());
                         params.put("montoLetras", letra.getMontoLetras());
@@ -88,20 +96,40 @@ public class LetraCambioService {
                         params.put("giradorDocumento", letra.getGiradorDocumento());
                         params.put("giradoNombre", letra.getGiradoNombre());
                         params.put("giradoDocumento", letra.getGiradoDocumento());
-                        params.put("intereses", letra.getIntereses() != null ? letra.getIntereses().toString() : "");
+                        params.put("intereses", letra.getIntereses());
 
                         JasperPrint jasperPrint = JasperFillManager.fillReport(
                                         jasperReport,
                                         params,
                                         new JREmptyDataSource());
 
-                        // cambiar el estado
+                        // 1️⃣ Generar PDF una sola vez
+                        byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
+                        // 2️⃣ Guardar PDF en disco
+                        String rutaBase = "/tmp/letras-cambio"; // ideal: property
+                        Files.createDirectories(Paths.get(rutaBase));
+
+                        String nombreArchivo = "letra_cambio_" + letra.getId() + ".pdf";
+                        Path rutaPdf = Paths.get(rutaBase, nombreArchivo);
+
+                        Files.write(rutaPdf, pdfBytes);
+
+                        // 3️⃣ Actualizar estado y ruta
                         letra.setEstado(EstadoLetra.GENERADA);
+                        // letra.setRutaPdf(rutaPdf.toString());
 
-                        repository.save(letra);
+                        LetraCambioEntity guardada = repository.save(letra);
 
-                        return JasperExportManager.exportReportToPdf(jasperPrint);
+                        // 4️⃣ Enviar email (adjunto)
+                        mailService.sendEmail(
+                                        "olimpusmac@gmail.com",
+                                        "Letra de cambio generada",
+                                        "Se ha generado la letra de cambio adjunta.",
+                                        pdfBytes);
+
+                        // 5️⃣ Retornar el registro
+                        return guardada;
                 } catch (Exception e) {
                         throw new RuntimeException("Error generando PDF", e);
                 }
