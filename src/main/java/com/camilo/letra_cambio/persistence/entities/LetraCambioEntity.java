@@ -41,6 +41,8 @@ public class LetraCambioEntity {
     @Column(nullable = false)
     private LocalDate fechaVencimiento;
 
+    private String intereses;
+
     // GIRADOR
     private String giradorNombre;
     private String giradorDocumento;

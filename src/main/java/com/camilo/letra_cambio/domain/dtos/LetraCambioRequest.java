@@ -15,6 +15,7 @@ public class LetraCambioRequest {
     private String montoLetras;
     private String fechaEmision;
     private String fechaVencimiento;
+    private String intereses;
     private UserRequest girador;
     private UserRequest girado;
     private UserRequest beneficiario;

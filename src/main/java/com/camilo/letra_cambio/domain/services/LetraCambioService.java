@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -45,38 +47,59 @@ public class LetraCambioService {
                                 .giradoNombre(request.getGirado().getNombre())
                                 .giradoDocumento(request.getGirado().getDocumento())
                                 .giradoDocumentoCiudad(request.getGirado().getDocumentoCiudad())
-                                .beneficiarioNombre(request.getBeneficiario().getNombre())
-                                .beneficiarioDocumento(request.getBeneficiario().getDocumento())
-                                .beneficiarioDocumentoCiudad(request.getBeneficiario().getDocumentoCiudad())
+                                .beneficiarioNombre(request.getBeneficiario() != null
+                                                ? request.getBeneficiario().getNombre()
+                                                : null)
+                                .beneficiarioDocumento(request.getBeneficiario() != null
+                                                ? request.getBeneficiario().getDocumento()
+                                                : null)
+                                .beneficiarioDocumentoCiudad(request.getBeneficiario() != null
+                                                ? request.getBeneficiario().getDocumentoCiudad()
+                                                : null)
                                 .createdAt(LocalDateTime.now())
                                 .estado(EstadoLetra.BORRADOR)
+                                .intereses(request.getIntereses())
                                 .build();
 
                 return repository.save(letra);
         }
 
-        public byte[] generarPdf(LetraCambioRequest request) {
+        public List<LetraCambioEntity> listar(String documento) {
+                return repository.findByGiradorDocumento(documento);
+        }
+
+        public byte[] generarPdf(String id) {
                 try {
+                        LetraCambioEntity letra = repository.findById(UUID.fromString(id))
+                                        .orElseThrow(() -> new RuntimeException("Letra de cambio no encontrada"));
+
                         InputStream jrxml = getClass().getResourceAsStream("/reports/letra_cambio_simple.jrxml");
 
                         JasperReport jasperReport = JasperCompileManager.compileReport(jrxml);
 
                         Map<String, Object> params = new HashMap<>();
 
-                        params.put("ciudad", request.getCiudad());
-                        params.put("monto", request.getMonto().toString());
-                        params.put("montoLetras", request.getMontoLetras());
-                        params.put("fechaEmision", request.getFechaEmision());
-                        params.put("fechaVencimiento", request.getFechaVencimiento());
-                        params.put("giradorNombre", request.getGirador().getNombre());
-                        params.put("giradorDocumento", request.getGirador().getDocumento());
-                        params.put("giradoNombre", request.getGirado().getNombre());
-                        params.put("giradoDocumento", request.getGirado().getDocumento());
+                        params.put("ciudad", letra.getCiudad());
+                        params.put("monto", letra.getMonto().toString());
+                        params.put("montoLetras", letra.getMontoLetras());
+                        params.put("fechaEmision", letra.getFechaEmision().toString());
+                        params.put("fechaVencimiento", letra.getFechaVencimiento().toString());
+                        params.put("giradorNombre", letra.getGiradorNombre());
+                        params.put("giradorDocumento", letra.getGiradorDocumento());
+                        params.put("giradoNombre", letra.getGiradoNombre());
+                        params.put("giradoDocumento", letra.getGiradoDocumento());
+                        params.put("intereses", letra.getIntereses() != null ? letra.getIntereses().toString() : "");
 
                         JasperPrint jasperPrint = JasperFillManager.fillReport(
                                         jasperReport,
                                         params,
                                         new JREmptyDataSource());
+
+                        // cambiar el estado
+
+                        letra.setEstado(EstadoLetra.GENERADA);
+
+                        repository.save(letra);
 
                         return JasperExportManager.exportReportToPdf(jasperPrint);
                 } catch (Exception e) {

@@ -21,6 +21,7 @@
     <parameter name="giradorDocumento" class="java.lang.String" />
     <parameter name="giradoNombre" class="java.lang.String" />
     <parameter name="giradoDocumento" class="java.lang.String" />
+    <parameter name="intereses" class="java.lang.String" />
 
     <!-- ================== TITULO ================== -->
     <title>
@@ -52,7 +53,7 @@
 
             <!-- TEXTO PRINCIPAL -->
             <textField isStretchWithOverflow="true">
-                <reportElement x="15" y="45" width="366" height="110" />
+                <reportElement x="15" y="35" width="366" height="110" />
                 <textElement textAlignment="Justified">
                     <font size="9" />
                 </textElement>
@@ -66,13 +67,27 @@ $P{montoLetras} + " (" + $P{monto} + ")."
 
             <!-- VENCIMIENTO -->
             <textField>
-                <reportElement x="15" y="160" width="366" height="25" />
+                <reportElement x="15" y="80" width="366" height="25" />
                 <textElement textAlignment="Justified">
                     <font size="9" />
                 </textElement>
                 <textFieldExpression><![CDATA[
 "El pago deberá realizarse el día " + $P{fechaVencimiento} +
 ", en la ciudad de " + $P{ciudad} + "."
+                ]]></textFieldExpression>
+            </textField>
+
+
+            <!-- INTERESES -->
+            <textField>
+                <reportElement x="15" y="110" width="366" height="35" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+                    ($P{intereses} != null && !$P{intereses}.trim().isEmpty())
+                        ? "La presente letra causará intereses corrientes del " + $P{intereses} + "% mensual desde la fecha de su suscripción hasta su vencimiento. \nEn caso de mora, causará intereses moratorios a la tasa máxima legal permitida por la Superintendencia Financiera de Colombia."
+                        : "La suma aquí ordenada NO causará intereses."
                 ]]></textFieldExpression>
             </textField>
 
