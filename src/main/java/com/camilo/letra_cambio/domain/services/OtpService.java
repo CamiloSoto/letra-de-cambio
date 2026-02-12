@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.camilo.letra_cambio.domain.dtos.OtpValidationRequest;
+import com.camilo.letra_cambio.persistence.entities.FirmaElectronicaEntity;
 import com.camilo.letra_cambio.persistence.entities.OtpEntity;
 import com.camilo.letra_cambio.persistence.entities.TipoFirma;
 import com.camilo.letra_cambio.persistence.repositories.OtpJpaRepository;
@@ -24,6 +26,7 @@ public class OtpService {
     private static final int OTP_LENGTH = 6;
     private final OtpJpaRepository otpRepository;
     private final MailService emailService;
+    private final FirmaElectronicaService firmaElectronicaService;
 
     public static String generateNumericOtp() {
         int bound = (int) Math.pow(10, OTP_LENGTH);
@@ -46,8 +49,8 @@ public class OtpService {
     }
 
     public void generateAndSendOtp(String email,
-                                   String letraCambioId,
-                                   TipoFirma tipo) {
+            String letraCambioId,
+            TipoFirma tipo) {
 
         // 1️⃣ Generar OTP
         String otp = generateNumericOtp();
@@ -74,8 +77,50 @@ public class OtpService {
                 email,
                 otp,
                 tipo,
-                letraCambioId
-        );
+                letraCambioId);
+    }
+
+    public void validateOtp(OtpValidationRequest request, String ipOrigen, String userAgent) {
+
+        // 1️⃣ Buscar OTP activo más reciente
+        OtpEntity otpEntity = otpRepository
+                .findTopByEmailAndLetraCambioIdAndTipoAndUsedFalseOrderByCreatedAtDesc(
+                        request.getEmail(),
+                        request.getLetraCambioId(),
+                        request.getTipo().name())
+                .orElseThrow(() -> new IllegalArgumentException("OTP no encontrado"));
+
+        // 2️⃣ Validar expiración
+        if (LocalDateTime.now().isAfter(otpEntity.getExpiresAt())) {
+            throw new IllegalArgumentException("OTP expirado");
+        }
+
+        // 3️⃣ Calcular hash del OTP ingresado
+        String calculatedHash = hashOtp(
+                request.getOtp(),
+                otpEntity.getSalt());
+
+        if (!calculatedHash.equals(otpEntity.getOtpHash())) {
+            throw new IllegalArgumentException("OTP inválido");
+        }
+
+        // 4️⃣ Marcar OTP como usado
+        otpEntity.setUsed(true);
+        otpEntity.setValidatedAt(LocalDateTime.now());
+        otpRepository.save(otpEntity);
+
+        // 5️⃣ Cerrar firma electrónica
+        FirmaElectronicaEntity firma = new FirmaElectronicaEntity();
+        firma.setLetraCambioId(request.getLetraCambioId());
+        firma.setEmail(request.getEmail());
+        firma.setTipo(request.getTipo().name());
+        firma.setMetodo("OTP_EMAIL");
+        firma.setHashDocumento("");
+        firma.setFechaFirma(otpEntity.getValidatedAt());
+        firma.setIpOrigen(ipOrigen);
+        firma.setUserAgent(userAgent);
+        firma.setVigente(true);
+        firmaElectronicaService.registrarFirma(firma);
     }
 
 }
