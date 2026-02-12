@@ -80,7 +80,7 @@ $P{montoLetras} + " (" + $P{monto} + ")."
 
             <!-- INTERESES -->
             <textField>
-                <reportElement x="15" y="110" width="366" height="35" />
+                <reportElement x="15" y="110" width="366" height="45" />
                 <textElement textAlignment="Justified">
                     <font size="9" />
                 </textElement>

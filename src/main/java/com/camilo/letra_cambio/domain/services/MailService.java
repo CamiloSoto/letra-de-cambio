@@ -1,5 +1,8 @@
 package com.camilo.letra_cambio.domain.services;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -60,6 +63,38 @@ public class MailService {
             helper.setSubject("Verifica tu correo");
             helper.setFrom(mailProperties.getUsername());
             helper.setText(html, true);
+
+            mailSender.send(message);
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error enviando correo", e);
+        }
+    }
+
+    public void sendDocumentEmail(String to, String deudor, String beneficiario, BigDecimal valor,
+            LocalDate fechaVencimiento, byte[] attachment) {
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            Context context = new Context();
+            context.setVariable("deudor", deudor);
+            context.setVariable("beneficiario", beneficiario);
+            context.setVariable("valor", valor);
+            context.setVariable("fechaVencimiento", fechaVencimiento);
+
+            String html = templateEngine.process("mail/document-email", context);
+
+            helper.setTo(to);
+            helper.setSubject("Documento de Letra de Cambio");
+            helper.setFrom(mailProperties.getUsername());
+            helper.setText(html, true);
+
+            if (attachment != null && attachment.length > 0) {
+                ByteArrayResource byteArrayResource = new ByteArrayResource(attachment);
+                helper.addAttachment("letra_cambio.pdf", byteArrayResource);
+            }
 
             mailSender.send(message);
 

@@ -122,12 +122,9 @@ public class LetraCambioService {
                         LetraCambioEntity guardada = repository.save(letra);
 
                         // 4️⃣ Enviar email (adjunto)
-                        mailService.sendEmail(
-                                        "olimpusmac@gmail.com",
-                                        "Letra de cambio generada",
-                                        "Se ha generado la letra de cambio adjunta.",
+                        mailService.sendDocumentEmail("alejandro.vega.lims@gmail.com", letra.getGiradorNombre(),
+                                        letra.getBeneficiarioNombre(), letra.getMonto(), letra.getFechaVencimiento(),
                                         pdfBytes);
-
                         // 5️⃣ Retornar el registro
                         return guardada;
                 } catch (Exception e) {
