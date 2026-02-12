@@ -2,6 +2,7 @@ package com.camilo.letra_cambio.domain.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Locale;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import com.camilo.letra_cambio.persistence.entities.TipoFirma;
 import com.camilo.letra_cambio.web.config.MailProperties;
 
 import jakarta.mail.MessagingException;
@@ -95,6 +97,32 @@ public class MailService {
                 ByteArrayResource byteArrayResource = new ByteArrayResource(attachment);
                 helper.addAttachment("letra_cambio.pdf", byteArrayResource);
             }
+
+            mailSender.send(message);
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error enviando correo", e);
+        }
+    }
+
+    public void sendOtpEmail(String to, String otp, TipoFirma tipo, String letraCambioId) {
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            Context context = new Context(Locale.forLanguageTag("es"));
+            context.setVariable("otpCode", otp);
+            context.setVariable("expirationMinutes", 5);
+            context.setVariable("letraCambioId", letraCambioId);
+            context.setVariable("tipoFirma", tipo.name());
+
+            String html = templateEngine.process("mail/otp", context);
+
+            helper.setTo(to);
+            helper.setSubject("Documento de Letra de Cambio");
+            helper.setFrom(mailProperties.getUsername());
+            helper.setText(html, true);
 
             mailSender.send(message);
 
