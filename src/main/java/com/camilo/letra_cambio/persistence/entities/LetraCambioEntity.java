@@ -43,7 +43,7 @@ public class LetraCambioEntity {
     @Column(nullable = false)
     private LocalDate fechaVencimiento;
 
-    private String intereses;
+    private BigDecimal intereses;
 
     // GIRADOR
     private String giradorNombre;

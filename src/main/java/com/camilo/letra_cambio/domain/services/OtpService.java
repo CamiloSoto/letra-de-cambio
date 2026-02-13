@@ -82,7 +82,6 @@ public class OtpService {
 
     public void validateOtp(OtpValidationRequest request, String ipOrigen, String userAgent) {
 
-        // 1️⃣ Buscar OTP activo más reciente
         OtpEntity otpEntity = otpRepository
                 .findTopByEmailAndLetraCambioIdAndTipoAndUsedFalseOrderByCreatedAtDesc(
                         request.getEmail(),
@@ -90,26 +89,20 @@ public class OtpService {
                         request.getTipo().name())
                 .orElseThrow(() -> new IllegalArgumentException("OTP no encontrado"));
 
-        // 2️⃣ Validar expiración
         if (LocalDateTime.now().isAfter(otpEntity.getExpiresAt())) {
             throw new IllegalArgumentException("OTP expirado");
         }
 
-        // 3️⃣ Calcular hash del OTP ingresado
-        String calculatedHash = hashOtp(
-                request.getOtp(),
-                otpEntity.getSalt());
+        String calculatedHash = hashOtp(request.getOtp(), otpEntity.getSalt());
 
         if (!calculatedHash.equals(otpEntity.getOtpHash())) {
             throw new IllegalArgumentException("OTP inválido");
         }
 
-        // 4️⃣ Marcar OTP como usado
         otpEntity.setUsed(true);
         otpEntity.setValidatedAt(LocalDateTime.now());
         otpRepository.save(otpEntity);
 
-        // 5️⃣ Cerrar firma electrónica
         FirmaElectronicaEntity firma = new FirmaElectronicaEntity();
         firma.setLetraCambioId(request.getLetraCambioId());
         firma.setEmail(request.getEmail());

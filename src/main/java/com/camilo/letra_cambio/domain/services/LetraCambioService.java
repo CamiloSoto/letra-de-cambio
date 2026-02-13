@@ -1,9 +1,7 @@
 package com.camilo.letra_cambio.domain.services;
 
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +39,6 @@ public class LetraCambioService {
         private final AuthService authService;
 
         public LetraCambioEntity crearLetraCambio(LetraCambioRequest request, String email) {
-                DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
                 UserEntity user = userService.findByEmail(email)
                                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
@@ -50,8 +47,8 @@ public class LetraCambioService {
                                 .ciudad(request.getCiudad())
                                 .monto(request.getMonto())
                                 .montoLetras(request.getMontoLetras())
-                                .fechaEmision(LocalDate.parse(request.getFechaEmision(), formatter))
-                                .fechaVencimiento(LocalDate.parse(request.getFechaVencimiento(), formatter))
+                                .fechaEmision(request.getFechaEmision())
+                                .fechaVencimiento(request.getFechaVencimiento())
                                 .giradorEmail(request.getGirador().getEmail())
                                 .giradorNombre(request.getGirador().getNombre())
                                 .giradorDocumento(request.getGirador().getDocumento())

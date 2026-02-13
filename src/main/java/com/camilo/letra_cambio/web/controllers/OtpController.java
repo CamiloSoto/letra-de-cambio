@@ -33,9 +33,7 @@ public class OtpController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<Void> validateOtp(
-            @RequestBody OtpValidationRequest request,
-            HttpServletRequest httpRequest) {
+    public ResponseEntity<Void> validateOtp(@RequestBody OtpValidationRequest request, HttpServletRequest httpRequest) {
 
         String ipOrigen = getClientIp(httpRequest);
         String userAgent = httpRequest.getHeader("User-Agent");
