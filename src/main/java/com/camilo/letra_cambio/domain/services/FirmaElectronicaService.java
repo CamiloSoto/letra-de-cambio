@@ -1,6 +1,7 @@
 package com.camilo.letra_cambio.domain.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,10 @@ public class FirmaElectronicaService {
     public void registrarFirma(FirmaElectronicaEntity firma) {
         firma.setFechaFirma(LocalDateTime.now());
         firmaRepository.save(firma);
+    }
+
+    public List<FirmaElectronicaEntity> obtenerFirmasPorLetraCambioId(String letraCambioId) {
+        return firmaRepository.findByLetraCambioId(letraCambioId);
     }
 
 }

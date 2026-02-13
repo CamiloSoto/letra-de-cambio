@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.camilo.letra_cambio.domain.dtos.LetraCambioRequest;
 import com.camilo.letra_cambio.persistence.entities.EstadoLetra;
+import com.camilo.letra_cambio.persistence.entities.FirmaElectronicaEntity;
 import com.camilo.letra_cambio.persistence.entities.LetraCambioEntity;
 import com.camilo.letra_cambio.persistence.repositories.LetraCambioJpaRepository;
 
@@ -33,6 +34,7 @@ public class LetraCambioService {
         private final LetraCambioJpaRepository repository;
         private final MailService mailService;
         private final StorageService storageService;
+        private final FirmaElectronicaService firmaElectronicaService;
 
         public LetraCambioEntity crearLetraCambio(LetraCambioRequest request) {
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -73,11 +75,13 @@ public class LetraCambioService {
         public LetraCambioEntity generarPdf(String id) {
                 try {
                         LetraCambioEntity letra = repository.findById(UUID.fromString(id))
-                                        .orElseThrow(() -> new IllegalArgumentException("Letra de cambio no encontrada"));
+                                        .orElseThrow(() -> new IllegalArgumentException(
+                                                        "Letra de cambio no encontrada"));
 
-                        if (letra.getEstado() != EstadoLetra.BORRADOR) {
-                                throw new IllegalArgumentException("El PDF ya ha sido generado para esta letra de cambio");
-                        }
+                        // if (letra.getEstado() != EstadoLetra.BORRADOR) {
+                        //         throw new IllegalArgumentException(
+                        //                         "El PDF ya ha sido generado para esta letra de cambio");
+                        // }
 
                         InputStream jrxml = getClass()
                                         .getResourceAsStream("/reports/letra_cambio_simple.jrxml");
@@ -100,6 +104,22 @@ public class LetraCambioService {
                         params.put("giradoDocumento", letra.getGiradoDocumento());
                         params.put("intereses", letra.getIntereses());
 
+                        // firmas
+                        List<FirmaElectronicaEntity> firmas = firmaElectronicaService
+                                        .obtenerFirmasPorLetraCambioId(letra.getId().toString());
+
+                        for (FirmaElectronicaEntity firma : firmas) {
+                                if (firma.getTipo().equals("GIRADOR")) {
+                                        params.put("fechaFirmaGirador", firma.getFechaFirma().toString());
+                                } else if (firma.getTipo().equals("GIRADO")) {
+                                        params.put("fechaFirmaGirado", firma.getFechaFirma().toString());
+                                }
+                        }
+
+                        params.put("documentoId", id);
+                        params.put("metodoFirma", "OTP via Email");
+                        params.put("algoritmoHash", "SHA-256");
+
                         JasperPrint jasperPrint = JasperFillManager.fillReport(
                                         jasperReport,
                                         params,
@@ -117,7 +137,7 @@ public class LetraCambioService {
                                         "application/pdf");
 
                         // 3️⃣ Actualizar estado y ruta
-                        letra.setEstado(EstadoLetra.GENERADA);
+                        letra.setEstado(EstadoLetra.FIRMADA);
                         letra.setRutaPdf(key);
 
                         LetraCambioEntity guardada = repository.save(letra);

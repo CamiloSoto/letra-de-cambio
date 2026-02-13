@@ -23,6 +23,12 @@
     <parameter name="giradoDocumento" class="java.lang.String" />
     <parameter name="intereses" class="java.lang.String" />
 
+    <parameter name="documentoId" class="java.lang.String" />
+    <parameter name="fechaFirmaGirador" class="java.lang.String" />
+    <parameter name="fechaFirmaGirado" class="java.lang.String" />
+    <parameter name="metodoFirma" class="java.lang.String" />
+    <parameter name="algoritmoHash" class="java.lang.String" />
+
     <!-- ================== TITULO ================== -->
     <title>
         <band height="60">
@@ -196,5 +202,84 @@ Firma_____________________________
 
         </band>
     </detail>
+
+    <summary>
+        <band height="600">
+
+            <!-- TÍTULO -->
+            <staticText>
+                <reportElement x="0" y="20" width="396" height="30" />
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true" />
+                </textElement>
+                <text><![CDATA[CONSTANCIA DE FIRMAS ELECTRÓNICAS]]></text>
+            </staticText>
+
+            <!-- TEXTO INTRODUCTORIO -->
+            <staticText>
+                <reportElement x="20" y="70" width="356" height="60" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <text><![CDATA[
+El presente documento deja constancia de las firmas electrónicas
+realizadas sobre la letra de cambio, de conformidad con la Ley 527
+de 1999 y el Decreto 2364 de 2012.
+            ]]></text>
+            </staticText>
+
+            <!-- DATOS DEL DOCUMENTO -->
+            <textField>
+                <reportElement x="20" y="140" width="356" height="70" />
+                <textElement>
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+"ID del documento: " + $P{documentoId} + "\n" +
+"Algoritmo de integridad: " + $P{algoritmoHash}
+            ]]></textFieldExpression>
+            </textField>
+
+            <!-- FIRMA GIRADOR -->
+            <textField>
+                <reportElement x="20" y="230" width="356" height="60" />
+                <textElement>
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+"Firmante: GIRADOR\n" +
+"Fecha de firma: " + $P{fechaFirmaGirador} + "\n" +
+"Método de firma: " + $P{metodoFirma}
+            ]]></textFieldExpression>
+            </textField>
+
+            <!-- FIRMA GIRADO -->
+            <textField>
+                <reportElement x="20" y="310" width="356" height="60" />
+                <textElement>
+                    <font size="9" />
+                </textElement>
+                <textFieldExpression><![CDATA[
+"Firmante: GIRADO\n" +
+"Fecha de firma: " + $P{fechaFirmaGirado} + "\n" +
+"Método de firma: " + $P{metodoFirma}
+            ]]></textFieldExpression>
+            </textField>
+
+            <!-- CIERRE -->
+            <staticText>
+                <reportElement x="20" y="400" width="356" height="60" />
+                <textElement textAlignment="Justified">
+                    <font size="9" />
+                </textElement>
+                <text><![CDATA[
+Este documento fue sellado electrónicamente por el sistema.
+Cualquier alteración posterior invalida su integridad.
+            ]]></text>
+            </staticText>
+
+        </band>
+    </summary>
+
 
 </jasperReport>
