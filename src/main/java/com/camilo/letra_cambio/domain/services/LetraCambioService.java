@@ -161,7 +161,7 @@ public class LetraCambioService {
                         LetraCambioEntity guardada = repository.save(letra);
 
                         // 4️⃣ Enviar email (adjunto)
-                        mailService.sendDocumentEmail("alejandro.vega.lims@gmail.com", letra.getGiradoNombre(),
+                        mailService.sendDocumentEmail(letra.getCreatedBy().getEmail(), letra.getGiradoNombre(),
                                         letra.getBeneficiarioNombre(), letra.getMonto(), letra.getFechaVencimiento(),
                                         pdfBytes);
                         // 5️⃣ Retornar el registro
