@@ -91,6 +91,5 @@ public class AuthService {
     public UserEntity getUserAuth(Authentication authentication) {
         String email = authentication.getName();
         return userService.findByEmail(email).orElseThrow();
-
     }
 }
