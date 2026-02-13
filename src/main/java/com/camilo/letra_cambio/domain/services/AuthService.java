@@ -2,6 +2,7 @@ package com.camilo.letra_cambio.domain.services;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.camilo.letra_cambio.domain.dtos.AuthResponse;
@@ -87,4 +88,9 @@ public class AuthService {
                 .build();
     }
 
+    public UserEntity getUserAuth(Authentication authentication) {
+        String email = authentication.getName();
+        return userService.findByEmail(email).orElseThrow();
+
+    }
 }

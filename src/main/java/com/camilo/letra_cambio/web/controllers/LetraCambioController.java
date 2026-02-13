@@ -31,7 +31,8 @@ public class LetraCambioController {
     }
 
     @PostMapping
-    public ResponseEntity<LetraCambioEntity> crearLetra(@RequestBody LetraCambioRequest request, Authentication authentication) {
+    public ResponseEntity<LetraCambioEntity> crearLetra(@RequestBody LetraCambioRequest request,
+            Authentication authentication) {
         String email = authentication.getName();
         System.out.println("Usuario autenticado: " + email);
         LetraCambioEntity letra = service.crearLetraCambio(request, email);
@@ -41,6 +42,12 @@ public class LetraCambioController {
     @GetMapping
     public ResponseEntity<List<LetraCambioEntity>> list(@RequestParam String documento) {
         List<LetraCambioEntity> letras = service.listar(documento);
+        return ResponseEntity.ok(letras);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<LetraCambioEntity>> findAll(Authentication authentication) {
+        List<LetraCambioEntity> letras = service.findAll(authentication);
         return ResponseEntity.ok(letras);
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.camilo.letra_cambio.domain.dtos.LetraCambioRequest;
@@ -37,6 +38,7 @@ public class LetraCambioService {
         private final StorageService storageService;
         private final FirmaElectronicaService firmaElectronicaService;
         private final UserService userService;
+        private final AuthService authService;
 
         public LetraCambioEntity crearLetraCambio(LetraCambioRequest request, String email) {
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -77,6 +79,11 @@ public class LetraCambioService {
                                 .build();
 
                 return repository.save(letra);
+        }
+
+        public List<LetraCambioEntity> findAll(Authentication authentication) {
+                var user = authService.getUserAuth(authentication);
+                return repository.findByCreatedBy(user);
         }
 
         public List<LetraCambioEntity> listar(String documento) {
