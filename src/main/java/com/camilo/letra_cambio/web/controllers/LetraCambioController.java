@@ -1,6 +1,7 @@
 package com.camilo.letra_cambio.web.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class LetraCambioController {
     private final LetraCambioService service;
 
     @PostMapping("/print")
-    public ResponseEntity<LetraCambioEntity> print(@RequestParam String id) {
+    public ResponseEntity<LetraCambioEntity> print(@RequestParam UUID id) {
         LetraCambioEntity letra = service.generarPdf(id);
         return ResponseEntity.ok(letra);
     }

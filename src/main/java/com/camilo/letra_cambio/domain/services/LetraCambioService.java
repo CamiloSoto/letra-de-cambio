@@ -90,9 +90,9 @@ public class LetraCambioService {
                 return repository.findByGiradorDocumento(documento);
         }
 
-        public LetraCambioEntity generarPdf(String id) {
+        public LetraCambioEntity generarPdf(UUID id) {
                 try {
-                        LetraCambioEntity letra = repository.findById(UUID.fromString(id))
+                        LetraCambioEntity letra = repository.findById(id)
                                         .orElseThrow(() -> new IllegalArgumentException(
                                                         "Letra de cambio no encontrada"));
 

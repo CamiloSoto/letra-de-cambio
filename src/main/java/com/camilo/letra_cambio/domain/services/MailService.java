@@ -44,8 +44,7 @@ public class MailService {
             mailSender.send(message);
             return true;
         } catch (MessagingException e) {
-            System.out.println(e.getMessage());
-            return false;
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
