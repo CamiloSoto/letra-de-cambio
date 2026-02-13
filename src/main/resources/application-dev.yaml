@@ -1,10 +1,5 @@
 application:
-  security:
-    jwt:
-      secret-key: qjY+ViKfqTFoUelwVpaOd1kdbaMOJ1q1taPmKTUg9Gk=
-      expiration: 86400000
-      refresh-token:
-        expiration: 604800000
+  name: letra-cambio-api
 
 spring:
   mail:
@@ -38,3 +33,9 @@ minio:
   secret-key: minio123
   bucket: letras-cambio
   region: us-east-1
+
+jwt:
+  secret-key: qjY+ViKfqTFoUelwVpaOd1kdbaMOJ1q1taPmKTUg9Gk=
+  expiration: 86400000
+  refresh-token:
+    expiration: 604800000
