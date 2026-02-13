@@ -41,8 +41,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         // cargar el usuario del UserDetailService
         String username = jwtUtil.getUsername(jwt);
-        String id = jwtUtil.getId(jwt);
-        System.out.println("USERID -> " + id);
+        // String id = jwtUtil.getId(jwt);
+        // System.out.println("USERID -> " + id);
 
         User user = (User) userDetailsService.loadUserByUsername(username);
         // cargar en el contexto de seguridad el auth

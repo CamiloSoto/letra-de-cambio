@@ -15,6 +15,7 @@ import com.camilo.letra_cambio.domain.dtos.LetraCambioRequest;
 import com.camilo.letra_cambio.persistence.entities.EstadoLetra;
 import com.camilo.letra_cambio.persistence.entities.FirmaElectronicaEntity;
 import com.camilo.letra_cambio.persistence.entities.LetraCambioEntity;
+import com.camilo.letra_cambio.persistence.entities.UserEntity;
 import com.camilo.letra_cambio.persistence.repositories.LetraCambioJpaRepository;
 
 import jakarta.transaction.Transactional;
@@ -35,9 +36,13 @@ public class LetraCambioService {
         private final MailService mailService;
         private final StorageService storageService;
         private final FirmaElectronicaService firmaElectronicaService;
+        private final UserService userService;
 
-        public LetraCambioEntity crearLetraCambio(LetraCambioRequest request) {
+        public LetraCambioEntity crearLetraCambio(LetraCambioRequest request, String email) {
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+                UserEntity user = userService.findByEmail(email)
+                                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
                 LetraCambioEntity letra = LetraCambioEntity.builder()
                                 .ciudad(request.getCiudad())
@@ -45,9 +50,11 @@ public class LetraCambioService {
                                 .montoLetras(request.getMontoLetras())
                                 .fechaEmision(LocalDate.parse(request.getFechaEmision(), formatter))
                                 .fechaVencimiento(LocalDate.parse(request.getFechaVencimiento(), formatter))
+                                .giradorEmail(request.getGirador().getEmail())
                                 .giradorNombre(request.getGirador().getNombre())
                                 .giradorDocumento(request.getGirador().getDocumento())
                                 .giradorDocumentoCiudad(request.getGirador().getDocumentoCiudad())
+                                .giradoEmail(request.getGirado().getEmail())
                                 .giradoNombre(request.getGirado().getNombre())
                                 .giradoDocumento(request.getGirado().getDocumento())
                                 .giradoDocumentoCiudad(request.getGirado().getDocumentoCiudad())
@@ -60,8 +67,12 @@ public class LetraCambioService {
                                 .beneficiarioDocumentoCiudad(request.getBeneficiario() != null
                                                 ? request.getBeneficiario().getDocumentoCiudad()
                                                 : null)
+                                .beneficiarioEmail(request.getBeneficiario() != null
+                                                ? request.getBeneficiario().getEmail()
+                                                : null)
                                 .createdAt(LocalDateTime.now())
                                 .estado(EstadoLetra.BORRADOR)
+                                .createdBy(user)
                                 .intereses(request.getIntereses())
                                 .build();
 
@@ -79,8 +90,8 @@ public class LetraCambioService {
                                                         "Letra de cambio no encontrada"));
 
                         // if (letra.getEstado() != EstadoLetra.BORRADOR) {
-                        //         throw new IllegalArgumentException(
-                        //                         "El PDF ya ha sido generado para esta letra de cambio");
+                        // throw new IllegalArgumentException(
+                        // "El PDF ya ha sido generado para esta letra de cambio");
                         // }
 
                         InputStream jrxml = getClass()
