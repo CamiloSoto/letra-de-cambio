@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.camilo.letra_cambio.persistence.entities.UserEntity;
 import com.camilo.letra_cambio.persistence.repositories.UserJpaRepository;
@@ -18,10 +17,10 @@ public class UserSecurityService implements UserDetailsService {
     private final UserJpaRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
 
         UserEntity user = this.repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Credencailes inválidas"));
 
         return User.builder()
                 .username(user.getEmail())

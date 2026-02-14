@@ -42,7 +42,7 @@ public class AuthService {
         UserEntity user = userService.findByEmail(request.getEmail()).orElseThrow();
 
         if (!user.isEmailVerified()) {
-            throw new IllegalStateException("Cuenta no verificada");
+            throw new IllegalArgumentException("Cuenta no verificada");
         }
 
         String accessToken = jwtUtil.createAccessToken(user);
